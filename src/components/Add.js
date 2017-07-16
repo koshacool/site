@@ -6,7 +6,7 @@ import request from 'superagent';
 class Add extends React.Component {
   constructor() {
     super();
-    this.state = {files: []};
+    this.state = { files: [] };
     this.onDrop = this.onDrop.bind(this);
     this.onSave = this.onSave.bind(this);
   }
@@ -35,17 +35,16 @@ class Add extends React.Component {
     const req = request.post('/upload');
 
     photosArr.forEach(file => {
-      console.log(file)
       req.attach(file.name, file);
     });
     req.end((err, res) => {
       if (err) {
         return console.log('returned error:', err);
       }
-      return console.log('returned data', res.req._data);
+      return console.log('returned data', res);
     });
 
-    /*request
+    /* request
      .post('/upload')
      .send({photo: photosArr[0]})
      .end((err, res) => {
@@ -75,9 +74,9 @@ class Add extends React.Component {
             {
               this.state.files.map(f =>
                 (<li key={f.lastModified}>
-                  <img src={f.preview} alt="test"/>
+                  <img src={f.preview} alt="test" />
                   {f.name} - {f.size} bytes
-                </li>)
+                </li>),
               )
             }
             <button onClick={this.onSave}>save</button>

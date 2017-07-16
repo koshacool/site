@@ -28323,17 +28323,17 @@ var Add = function (_React$Component) {
       var req = _superagent2.default.post('/upload');
 
       photosArr.forEach(function (file) {
-        console.log(file);
+        file.testValue = 'testing';
         req.attach(file.name, file);
       });
       req.end(function (err, res) {
         if (err) {
           return console.log('returned error:', err);
         }
-        return console.log('returned data', res.req._data);
+        return console.log('returned data', res);
       });
 
-      /*request
+      /* request
        .post('/upload')
        .send({photo: photosArr[0]})
        .end((err, res) => {

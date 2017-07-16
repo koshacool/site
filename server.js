@@ -2,6 +2,8 @@ var express = require('express');
 var path = require('path');
 var bodyParser = require('body-parser');
 var fs = require('fs');
+var multipart = require('connect-multiparty');
+var multipartMiddleware = multipart();
 
 var app = express();
 app.use(express.static('dist'));
@@ -14,11 +16,16 @@ app.get('/getdata', function (req, res) {
   res.send({test: 123});
 });
 
-app.post('/upload', function (req, res) {
-  let photos = req.body;
-  console.log(req.files)
-  console.log(req.params, req.query);
-  console.log(photos);
+app.post('/upload', multipartMiddleware, function (req, res) {
+  const photos = req.files;
+  console.log(photos)
+  const photosNames = Object.keys(photos);
+  photosNames.forEach((photo) => {
+    fs
+      .createReadStream(photos[photo].jpg.path)
+      .pipe(fs.createWriteStream(path.join(__dirname, `/images/${photos[photo].jpg.name}`)));
+  });
+
 
  /* fs.writeFile(path.join(__dirname, 'images/1.jpeg'), photos,  function(err) {
     if (err) throw err;
