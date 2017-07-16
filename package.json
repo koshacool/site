@@ -1,0 +1,101 @@
+{
+  "name": "upstar_music",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "clean": "rimraf dist",
+    "build": "npm run clean && webpack",
+    "serve": "webpack-dev-server"
+  },
+  "repository": "https://github.com/StephenGrider/WebpackProject",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "materialize-css": "^0.99.0",
+    "mongodb": "^2.2.30",
+    "react": "15.4.1",
+    "react-dom": "15.4.1",
+    "react-dropzone": "^3.13.3",
+    "react-images-uploader": "^1.0.1",
+    "react-router": "^3.0.0",
+    "request": "^2.81.0",
+    "request-progress": "^3.0.0",
+    "superagent": "^3.5.2"
+  },
+  "devDependencies": {
+    "babel-core": "^6.17.0",
+    "babel-eslint": "^7.2.3",
+    "babel-loader": "^6.2.0",
+    "babel-preset-env": "^1.1.4",
+    "babel-preset-react": "^6.16.0",
+    "css-loader": "^0.26.1",
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb": "^15.0.2",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-react": "^7.1.0",
+    "html-webpack-plugin": "^2.29.0",
+    "rimraf": "^2.6.1",
+    "style-loader": "^0.13.1",
+    "webpack": "^3.3.0"
+  },
+  "eslintConfig": {
+    "parser": "babel-eslint",
+    "parserOptions": {
+      "ecmaVersion": 6,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "jsx": true
+      },
+      "allowImportExportEverywhere": true
+    },
+    "extends": [
+      "airbnb"
+    ],
+    "rules": {
+      "import/no-extraneous-dependencies": "off",
+      "import/prefer-default-export": "off",
+      "no-underscore-dangle": "off",
+      "class-methods-use-this": "off",
+      "arrow-parens": "off",
+      "no-mixed-operators": "off",
+      "import/imports-first": "off",
+      "no-useless-escape": "off",
+      "no-extra-boolean-cast": "off",
+      "jsx-a11y/href-no-hash": "off",
+      "react/no-string-refs": "off",
+      "no-prototype-builtins": "off",
+      "react/no-unused-prop-types": "off",
+      "jsx-a11y/label-has-for": "off",
+      "no-plusplus": "off",
+      "no-lonely-if": "off",
+      "react/self-closing-comp": "off",
+      "object-shorthand": [
+        "error",
+        "always",
+        {
+          "avoidQuotes": false
+        }
+      ],
+      "react/jsx-filename-extension": [
+        1,
+        {
+          "extensions": [
+            ".js",
+            ".jsx"
+          ]
+        }
+      ],
+      "react/forbid-prop-types": "off",
+      "jsx-a11y/no-static-element-interactions": "off",
+      "import/extensions": [
+        "off",
+        "never"
+      ]
+    }
+  }
+}
