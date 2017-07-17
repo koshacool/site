@@ -7,9 +7,11 @@ var multipartMiddleware = multipart();
 
 var app = express();
 app.use(express.static('dist'));
+app.use(express.static('public'));
+
 app.use(bodyParser.json());       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
-  extended: false
+  extended: true
 }));
 
 app.get('/getdata', function (req, res) {
@@ -17,43 +19,58 @@ app.get('/getdata', function (req, res) {
 });
 
 app.post('/upload', multipartMiddleware, function (req, res) {
-  const photos = req.files;
-  console.log(photos)
-  const photosNames = Object.keys(photos);
+  const { files, query } = req;
+  const photosNames = Object.keys(files);
+
+  const moveFile = function (from, to) {
+    const source = fs.createReadStream(from);
+    const dest = fs.createWriteStream(to);
+
+    return new Promise((resolve, reject) => {
+      source.on('end', resolve);
+      source.on('error', reject);
+      source.pipe(dest);
+    });
+  }
+
   photosNames.forEach((photo) => {
-    fs
-      .createReadStream(photos[photo].jpg.path)
-      .pipe(fs.createWriteStream(path.join(__dirname, `/images/${photos[photo].jpg.name}`)));
+    console.log(files[photo].fieldName);
+    moveFile(files[photo].path, path.join(__dirname, `/images/${files[photo].fieldName}.jpg`))
+      .then(fs.unlink(files[photo].path));
+
+
   });
 
+  res.send({test: 123});
 
- /* fs.writeFile(path.join(__dirname, 'images/1.jpeg'), photos,  function(err) {
-    if (err) throw err;
-    console.log('File saved.');
-  });*/
+
+  /* fs.writeFile(path.join(__dirname, 'images/1.jpeg'), photos,  function(err) {
+   if (err) throw err;
+   console.log('File saved.');
+   });*/
 
   // photos.forEach((photo) => {
   //   fs.writeFile(path.join(__dirname, 'images/img.1'), photo, 'binary', function(err) {
   //     if (err) throw err;
   //     console.log('File saved.');
   //   });
-    // fs.createWriteStream(path.join(__dirname, 'images'));
-    // fsUtil(
-    //   photo.preview,
-    //   path.join(__dirname, 'images'),
-    //   function (state) {
-    //     console.log("progress", state);
-    //   },
-    //   function (response) {
-    //     console.log("status code", response.statusCode);
-    //   },
-    //   function (error) {
-    //     console.log("error", error);
-    //   },
-    //   function () {
-    //     console.log("done");
-    //   }
-    // )
+  // fs.createWriteStream(path.join(__dirname, 'images'));
+  // fsUtil(
+  //   photo.preview,
+  //   path.join(__dirname, 'images'),
+  //   function (state) {
+  //     console.log("progress", state);
+  //   },
+  //   function (response) {
+  //     console.log("status code", response.statusCode);
+  //   },
+  //   function (error) {
+  //     console.log("error", error);
+  //   },
+  //   function () {
+  //     console.log("done");
+  //   }
+  // )
   // })
 
 });
