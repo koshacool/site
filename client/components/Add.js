@@ -68,11 +68,7 @@ class Add extends React.Component {
 
   render() {
     const { files, text, date, photoType, loading } = this.state;
-    let componentConfig = {
-      iconFiletypes: ['.jpg', '.png', '.gif'],
-      showFiletypeIcon: true,
-      postUrl: '/uploadHandler'
-    };
+    console.log('work')
 
     return (
       <Spinner loading={loading}>
