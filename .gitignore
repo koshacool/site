@@ -1,2 +1,4 @@
 node_modules/
+etc/config.json
+script
 .idea
