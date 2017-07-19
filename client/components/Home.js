@@ -9,7 +9,7 @@ class Home extends React.Component {
     return (
       <div className="container">
 
-        testing..
+        testing...
         <Link to="/admin" ><button>test</button></Link>
       </div>
     );

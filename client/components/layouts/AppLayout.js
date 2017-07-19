@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Spinner from '../spiner/Spinner';
+import SiteFooter from './SiteFooter';
+import Header from './Header';
 
 
 /**
@@ -15,12 +17,13 @@ class AppLayout extends React.Component {
 
     return (
       <Spinner loading={false}>
+        <Header />
 
-
+        <main className="grey lighten-3">
           {!loading && children}
+        </main>
 
-
-
+        <SiteFooter />
       </Spinner>
     );
   }
