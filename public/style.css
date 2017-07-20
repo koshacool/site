@@ -8,7 +8,6 @@ main {
     flex: 1 0 auto;
 }
 
-
 nav ul a, nav .brand-logo {
     color: #444;
 }
@@ -16,3 +15,33 @@ nav ul a, nav .brand-logo {
 .page-footer span {
     color: #444
 }
+
+img {
+    max-width: 200px;
+    max-height: 200px;
+}
+
+.grid {
+    background: #EEE;
+    width: auto;
+}
+
+/* clearfix */
+.grid:after {
+    content: '';
+    display: block;
+    clear: both;
+}
+
+/* ---- grid-item ---- */
+
+.grid-item {
+    max-width: 200px;
+    max-height: 200px;
+    float: left;
+    background: #D26;
+    border: 2px solid #333;
+    border-color: hsla(0, 0%, 0%, 0.5);
+    border-radius: 5px;
+}
+

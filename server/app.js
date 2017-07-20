@@ -27,16 +27,13 @@ app.use(express.static('dist'));
 app.use(express.static('public'));
 
 // Allow requests from any origin
-app.use(cors({ origin: '*' }));
+app.use(cors({origin: '*'}));
 
-
-// Allow requests from any origin
-//app.use(cors({ origin: '*' }));
 
 // RESTful api handlers
-//app.get('/photos', (req, res) => {
-//    db.listNotes().then(data => res.send(data));
-//});
+app.get('/all', (req, res) => {
+  db.listPhotos().then(data => res.send(data));
+});
 //
 //app.post('/photos', (req, res) => {
 //    db.createNote(req.body).then(data => res.send(data));
@@ -44,9 +41,9 @@ app.use(cors({ origin: '*' }));
 //
 
 
-app.delete('/photos/:id', (req, res) => {
-    db.deleteNote(req.params.id).then(data => res.send(data));
-});
+//app.delete('/photos/:id', (req, res) => {
+//  db.deleteNote(req.params.id).then(data => res.send(data));
+//});
 
 app.post('/upload', multipartMiddleware, function (req, res) {
   const { files, query } = req;
@@ -63,15 +60,28 @@ app.post('/upload', multipartMiddleware, function (req, res) {
     });
   };
 
-  photosNames.forEach((photo) => {
-    console.log(files[photo].fieldName);
-    moveFile(files[photo].path, path.join(__dirname, `../public/images/${files[photo].fieldName}.jpg`))
-      .then(fs.unlink(files[photo].path))
-      .then(res.send({test: 123}))
-      .catch(err => console.log(err));
-  });
-
-
+  new Promise((resolve, reject) => {
+    photosNames.forEach((photo, i) => {
+      moveFile(files[photo].path, path.join(__dirname, `../public/images/${files[photo].fieldName}.jpg`))
+        .then(fs.unlink(files[photo].path))
+        .then(db.createPhoto({
+          title: `images/${files[photo].fieldName}.jpg`,
+          type: query.type,
+          description: query.description,
+          date: new Date()
+        }))
+        .then(() => {
+          if (i == photosNames.length - 1) {
+            resolve();
+          }
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  })
+    .then(res.send('saved'))
+    .catch(err => console.log(err));
 });
 
 app.get('*', function (req, res) {
