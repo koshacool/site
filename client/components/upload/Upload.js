@@ -2,11 +2,13 @@ import React from 'react';
 import Dropzone from 'react-dropzone';
 import request from 'superagent';
 
-import Spinner from './spiner/Spinner';
+import { apiPrefix } from '../../../etc/config.json';
+import Spinner from '../spiner/Spinner';
+import PhotoCollections from './PhotoCollections';
 
 const randomSymbols = (n) => Math.random().toString(36).slice(2, 2 + Math.max(1, Math.min(n, 25)));
 
-class Add extends React.Component {
+class Upload extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -44,10 +46,18 @@ class Add extends React.Component {
   onSave() {
     this.setState({loading: true});
 
+      //let form = new FormData();
+      //files.forEach(file => {
+      //  form.append(file.name, file);
+      //});
+      //form.append('foo', 'bar');
+      //axios.post('/api/art', form);
+
+
     const { files, text, date, photoType } = this.state;
     const about = {text, date, photoType};
 
-    const req = request.post('/upload');
+    const req = request.post(`${apiPrefix}/upload`);
 
     files.forEach(file => {
       req.attach(randomSymbols(15), file);
@@ -57,7 +67,7 @@ class Add extends React.Component {
     req.end((err, res) => {
       this.setState({loading: false});
       if (err) {
-        alert('Wrong saving. Tru again');
+        alert('Wrong saving. Try again');
         return console.log('returned error:', err);
       }
       alert('Data saved');
@@ -68,7 +78,7 @@ class Add extends React.Component {
 
   render() {
     const { files, text, date, photoType, loading } = this.state;
-    console.log('work')
+    console.log('work');
 
     return (
       <Spinner loading={loading}>
@@ -92,17 +102,7 @@ class Add extends React.Component {
             <input type="date" id="date" name="date" value={date} onChange={this.onChangeInput('date')}/>
             <input type="text" id="text" name="text" value={text} onChange={this.onChangeInput('text')}/>
 
-            <ul>
-              {
-                files.map(f =>
-                  (<li key={f.lastModified}>
-                    <img src={f.preview} alt="test" width="400px"/>
-                    {f.name} - {f.size} bytes
-                  </li>)
-                )
-              }
-
-            </ul>
+            <PhotoCollections images={files} onRemove={() => console.log('try remove') } />
           </aside>
 
         </section>
@@ -113,4 +113,4 @@ class Add extends React.Component {
 }
 
 
-export default Add;
+export default Upload;
