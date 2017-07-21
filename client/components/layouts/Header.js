@@ -9,8 +9,12 @@ const SiteFooter = () => (
     brand="HOME"
     className="grey lighten-3 grey-text text-darken-4 "
   >
-    <NavItem  className="grey-text text-darken-4 right" href='/admin'><Link to="/admin" >Getting started</Link></NavItem>
-    <NavItem className="grey-text text-darken-4 right">Components</NavItem>
+    <NavItem  className="grey-text text-darken-4 right" href='/admin'>
+      <Link to="/admin" >Upload</Link>
+    </NavItem>
+    <NavItem className="grey-text text-darken-4 right" href='/photos'>
+      <Link to="/photos" >Photos</Link>
+    </NavItem>
   </Navbar>
 );
 

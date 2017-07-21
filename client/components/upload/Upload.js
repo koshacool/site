@@ -13,10 +13,9 @@ class Upload extends React.Component {
     super();
     this.state = {
       files: [],
-      text: '',
-      date: '',
-      photoType: '',
-      loading: false,
+      description: '',
+      type: '',
+      loading: false
     };
 
     this.onDrop = this.onDrop.bind(this);
@@ -40,44 +39,37 @@ class Upload extends React.Component {
   }
 
   onSelectValue(e) {
-    this.onChangeInput('photoType')(e);
+    this.onChangeInput('type')(e);
   }
 
   onSave() {
     this.setState({loading: true});
-
-      //let form = new FormData();
-      //files.forEach(file => {
-      //  form.append(file.name, file);
-      //});
-      //form.append('foo', 'bar');
-      //axios.post('/api/art', form);
-
-
-    const { files, text, date, photoType } = this.state;
-    const about = {text, date, photoType};
+    const { files, description, type } = this.state;
+    const about = {description, type};
 
     const req = request.post(`${apiPrefix}/upload`);
+    req.query(about);
 
     files.forEach(file => {
       req.attach(randomSymbols(15), file);
     });
-    req.query(about);
 
     req.end((err, res) => {
-      this.setState({loading: false});
+      this.setState({ loading: false });
       if (err) {
         alert('Wrong saving. Try again');
         return console.log('returned error:', err);
       }
-      alert('Data saved');
+      this.setState({ files: [] });
+      alert(res.text);
+
       return;
     });
   }
 
 
   render() {
-    const { files, text, date, photoType, loading } = this.state;
+    const { files, description, photoType, loading } = this.state;
     console.log('work');
 
     return (
@@ -93,14 +85,14 @@ class Upload extends React.Component {
 
             <button onClick={this.onSave}>Save</button>
 
-            <select name='photoType' id='photoType' onChange={this.onSelectValue}>
+            <select name='type' id='type' onChange={this.onSelectValue}>
               <option selected value={false}>Select photo type</option>
               <option value="lovestory">LoveStore</option>
               <option value="wedding">Wedding</option>
               <option value="children">Children</option>
             </select>
-            <input type="date" id="date" name="date" value={date} onChange={this.onChangeInput('date')}/>
-            <input type="text" id="text" name="text" value={text} onChange={this.onChangeInput('text')}/>
+
+            <input type="text" id="description" name="description" value={description} onChange={this.onChangeInput('description')}/>
 
             <PhotoCollections images={files} onRemove={() => console.log('try remove') } />
           </aside>

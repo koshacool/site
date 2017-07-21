@@ -15,8 +15,8 @@ const Loader = () => (
   <div className="progress-circle-indeterminate" />
 );
 
-const Spinner = ({ loading, children, className }) => (
-  <div className={`spinner-wrapper ${className}`}>
+const Spinner = ({ loading, children, className, id }) => (
+  <div className={`spinner-wrapper ${className}`} id={id}>
     { showLoader(loading) ? <Loader /> : children }
   </div>
 );

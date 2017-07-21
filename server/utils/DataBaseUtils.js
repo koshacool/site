@@ -2,28 +2,34 @@ import mongoose from "mongoose";
 import config from '../../etc/config.json';
 import '../models';
 
-const Images = mongoose.model('Images');
+const Photo = mongoose.model('Photos');
 
 export function setUpConnection() {
-    mongoose.connect(`mongodb://${config.db.host}:${config.db.port}/${config.db.name}`);
+    const { host, port, name } = config.db;
+    mongoose.connect(`mongodb://${host}:${port}/${name}`, {
+      useMongoClient: true
+      /* other options */
+    });
 }
 
-export function listNotes(id) {
-    return Images.find();
+export function listPhotos(id) {
+    return Photo.find();
 }
 
-export function createNote(data) {
-    const Images = new Note({
-        title: data.title,
-        text: data.text,
-        color: data.color,
+export function createPhoto({ title, description, type }) {
+    const photo = new Photo({
+        title,
+        description,
+        type,
         createdAt: new Date()
     });
 
-    return Images.save();
+    return photo.save()
+      .then(console.log('db saved'))
+      .catch(err => console.log('error:', err));
 }
 
-export function deleteNote(id) {
-    return Images.findById(id).remove();
+export function deletePhoto(id) {
+    return Photo.findById(id).remove();
 }
 

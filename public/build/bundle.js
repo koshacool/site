@@ -19788,6 +19788,10 @@
 
 	var _componentsUploadUpload2 = _interopRequireDefault(_componentsUploadUpload);
 
+	var _componentsPhotosPhotosList = __webpack_require__(478);
+
+	var _componentsPhotosPhotosList2 = _interopRequireDefault(_componentsPhotosPhotosList);
+
 	var renderRoutes = function renderRoutes() {
 	  return _react2['default'].createElement(
 	    _reactRouter.Router,
@@ -19796,6 +19800,7 @@
 	      _reactRouter.Route,
 	      { path: '/', component: _componentsLayoutsAppLayout2['default'] },
 	      _react2['default'].createElement(_reactRouter.IndexRoute, { component: _componentsHome2['default'] }),
+	      _react2['default'].createElement(_reactRouter.Route, { path: 'photos', component: _componentsPhotosPhotosList2['default'] }),
 	      _react2['default'].createElement(_reactRouter.Route, { path: 'admin', component: _componentsUploadUpload2['default'] })
 	    )
 	  );
@@ -52958,13 +52963,17 @@
 	      _react2['default'].createElement(
 	        _reactRouter.Link,
 	        { to: '/admin' },
-	        'Getting started'
+	        'Upload'
 	      )
 	    ),
 	    _react2['default'].createElement(
 	      _reactMaterialize.NavItem,
-	      { className: 'grey-text text-darken-4 right' },
-	      'Components'
+	      { className: 'grey-text text-darken-4 right', href: '/photos' },
+	      _react2['default'].createElement(
+	        _reactRouter.Link,
+	        { to: '/photos' },
+	        'Photos'
+	      )
 	    )
 	  );
 	};
@@ -53119,9 +53128,8 @@
 	    _get(Object.getPrototypeOf(Upload.prototype), 'constructor', this).call(this);
 	    this.state = {
 	      files: [],
-	      text: '',
-	      date: '',
-	      photoType: '',
+	      description: '',
+	      type: '',
 	      loading: false
 	    };
 
@@ -53155,7 +53163,7 @@
 	  }, {
 	    key: 'onSelectValue',
 	    value: function onSelectValue(e) {
-	      this.onChangeInput('photoType')(e);
+	      this.onChangeInput('type')(e);
 	    }
 	  }, {
 	    key: 'onSave',
@@ -53163,36 +53171,28 @@
 	      var _this2 = this;
 
 	      this.setState({ loading: true });
-
-	      //let form = new FormData();
-	      //files.forEach(file => {
-	      //  form.append(file.name, file);
-	      //});
-	      //form.append('foo', 'bar');
-	      //axios.post('/api/art', form);
-
 	      var _state = this.state;
 	      var files = _state.files;
-	      var text = _state.text;
-	      var date = _state.date;
-	      var photoType = _state.photoType;
+	      var description = _state.description;
+	      var type = _state.type;
 
-	      var about = { text: text, date: date, photoType: photoType };
+	      var about = { description: description, type: type };
 
 	      var req = _superagent2['default'].post(_etcConfigJson.apiPrefix + '/upload');
+	      req.query(about);
 
 	      files.forEach(function (file) {
 	        req.attach(randomSymbols(15), file);
 	      });
-	      req.query(about);
 
 	      req.end(function (err, res) {
-	        _this2.setState({ loading: false });
 	        if (err) {
 	          alert('Wrong saving. Try again');
 	          return console.log('returned error:', err);
 	        }
-	        alert('Data saved');
+	        _this2.setState({ loading: false, files: [] });
+	        alert(res.text);
+
 	        return;
 	      });
 	    }
@@ -53201,8 +53201,7 @@
 	    value: function render() {
 	      var _state2 = this.state;
 	      var files = _state2.files;
-	      var text = _state2.text;
-	      var date = _state2.date;
+	      var description = _state2.description;
 	      var photoType = _state2.photoType;
 	      var loading = _state2.loading;
 
@@ -53242,7 +53241,7 @@
 	            ),
 	            _react2['default'].createElement(
 	              'select',
-	              { name: 'photoType', id: 'photoType', onChange: this.onSelectValue },
+	              { name: 'type', id: 'type', onChange: this.onSelectValue },
 	              _react2['default'].createElement(
 	                'option',
 	                { selected: true, value: false },
@@ -53264,8 +53263,7 @@
 	                'Children'
 	              )
 	            ),
-	            _react2['default'].createElement('input', { type: 'date', id: 'date', name: 'date', value: date, onChange: this.onChangeInput('date') }),
-	            _react2['default'].createElement('input', { type: 'text', id: 'text', name: 'text', value: text, onChange: this.onChangeInput('text') }),
+	            _react2['default'].createElement('input', { type: 'text', id: 'description', name: 'description', value: description, onChange: this.onChangeInput('description') }),
 	            _react2['default'].createElement(_PhotoCollections2['default'], { images: files, onRemove: function () {
 	                return console.log('try remove');
 	              } })
@@ -56172,7 +56170,7 @@
 		"apiPrefix": "http://localhost:8080",
 		"serverPort": "8080",
 		"db": {
-			"name": "notes",
+			"name": "photos",
 			"host": "localhost",
 			"port": 27017
 		}
@@ -56259,6 +56257,60 @@
 	};
 
 	exports['default'] = PhotoCollections;
+	module.exports = exports['default'];
+
+/***/ }),
+/* 478 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _propTypes = __webpack_require__(163);
+
+	var _propTypes2 = _interopRequireDefault(_propTypes);
+
+	var PhotosList = (function (_React$Component) {
+	  _inherits(PhotosList, _React$Component);
+
+	  function PhotosList() {
+	    _classCallCheck(this, PhotosList);
+
+	    _get(Object.getPrototypeOf(PhotosList.prototype), 'constructor', this).call(this);
+	  }
+
+	  _createClass(PhotosList, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2['default'].createElement(
+	        'h1',
+	        null,
+	        'test'
+	      );
+	    }
+	  }]);
+
+	  return PhotosList;
+	})(_react2['default'].Component);
+
+	exports['default'] = PhotosList;
 	module.exports = exports['default'];
 
 /***/ })
