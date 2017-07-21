@@ -13,41 +13,56 @@ class PhotosList extends React.Component {
       photos: []
     };
 
+    this.startMasonry = this.startMasonry.bind(this, this.counter());
     this.renderPhotos = this.renderPhotos.bind(this);
   }
 
   renderPhotos() {
     const { photos } = this.state;
-    console.log(photos);
 
     return photos
-      .map(photo => <PhotoItem src={photo.title} key={photo._id}/>);
+      .map(photo => <PhotoItem src={photo.title} key={photo._id} onLoad={this.startMasonry}/>);
   }
 
   componentDidMount() {
     listPhotos()
       .then(({ text }) => this.setState({photos: JSON.parse(text)}));
+
   }
 
-  componentDidUpdate() {
-    const grid = document.getElementById('grid');
-    const msnry = new Masonry(grid, {
-      itemSelector: '.grid-item',
-      columnWidth: 200,
-      gutter: 10
-    });
+  startMasonry(counter) {
+    const { photos } = this.state;
+    let count = counter();
+
+    if (count === photos.length) {
+      const msnry = new Masonry('.grid', {
+        itemSelector: '.grid-item',
+        columnWidth: 200,
+        gutter: 10
+      });
+    }
   }
+
+  counter() {
+    let currentCount = 0;
+
+    return () => {
+      currentCount++;
+      return currentCount;
+    }
+  }
+
 
   render() {
     const { photos } = this.state;
     const loading = photos.length === 0;
 
     return (
-      <Spinner loading={loading} className="grid" id="grid">
-
-        { !loading && this.renderPhotos() }
-
-      </Spinner>
+      <div className="container">
+        <Spinner loading={loading} className="grid" id="grid">
+          { !loading && this.renderPhotos() }
+        </Spinner>
+      </div>
     );
   }
 }

@@ -19,12 +19,11 @@ class PhotoItem extends React.Component {
 
   render() {
     const { loading } = this.state;
-    const { src } = this.props;
-    console.log(loading);
+    const { src, onLoad } = this.props;
 
     return (
-      <Spinner loading={loading} className="grid-item" id="grid-item">
-        <img src={src} />
+      <Spinner loading={loading} >
+        <img src={src}  className="grid-item" onLoad={onLoad} />
       </Spinner>
     );
   }
