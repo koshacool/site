@@ -24,7 +24,7 @@ export default {
     return axios.post(`${apiPrefix}/photos`, data);
   },
 
-  deletePhotos(noteId) {
-    return axios.delete(`${apiPrefix}/photos/${noteId}`);
+  deletePhotos(photoId) {
+    return axios.delete(`${apiPrefix}/remove/${photoId}`);
   }
 }

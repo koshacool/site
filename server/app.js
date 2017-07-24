@@ -47,10 +47,7 @@ app.get('/children', (req, res) => {
   db.photosByType('children').then(data => res.send(data));
 });
 
-
-
-
-app.delete('/photos/:id', (req, res) => {
+app.delete('/remove/:id', (req, res) => {
   db.deletePhoto(req.params.id).then(data => res.send(data));
 });
 
