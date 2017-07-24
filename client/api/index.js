@@ -4,16 +4,27 @@ import request from 'superagent';
 import { apiPrefix } from '../../etc/config.json';
 
 export default {
-    listPhotos() {
-        return request.get(`${apiPrefix}/all`);
-        //return axios.get(`${apiPrefix}/photos`);
-    },
+  listPhotos() {
+    return request.get(`${apiPrefix}/all`);
+  },
 
-    createPhotos(data) {
-        return axios.post(`${apiPrefix}/photos`, data);
-    },
+  weddingPhotos() {
+    return request.get(`${apiPrefix}/wedding`);
+  },
 
-    deletePhotos(noteId) {
-        return axios.delete(`${apiPrefix}/photos/${noteId}`);
-    }
+  lovestoryPhotos() {
+    return request.get(`${apiPrefix}/lovestory`);
+  },
+
+  childrenPhotos() {
+    return request.get(`${apiPrefix}/children`);
+  },
+
+  createPhotos(data) {
+    return axios.post(`${apiPrefix}/photos`, data);
+  },
+
+  deletePhotos(noteId) {
+    return axios.delete(`${apiPrefix}/photos/${noteId}`);
+  }
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import Dropzone from 'react-dropzone';
 import request from 'superagent';
+import { Button, Row, Input, Icon, } from 'react-materialize';
 
 import { apiPrefix } from '../../../etc/config.json';
 import Spinner from '../spiner/Spinner';
@@ -14,7 +15,7 @@ class Upload extends React.Component {
     this.state = {
       files: [],
       description: '',
-      type: '',
+      type: 'wedding',
       loading: false
     };
 
@@ -22,6 +23,7 @@ class Upload extends React.Component {
     this.onSave = this.onSave.bind(this);
     this.onChangeInput = this.onChangeInput.bind(this);
     this.onSelectValue = this.onSelectValue.bind(this);
+    this.onRemove = this.onRemove.bind(this);
   }
 
   onDrop(files) {
@@ -55,49 +57,91 @@ class Upload extends React.Component {
     });
 
     req.end((err, res) => {
-      this.setState({ loading: false });
+      this.setState({loading: false});
       if (err) {
         alert('Wrong saving. Try again');
         return console.log('returned error:', err);
       }
-      this.setState({ files: [] });
+      this.setState({files: []});
       alert(res.text);
 
       return;
     });
   }
 
+  onRemove(id) {
+    return () => {
+      const { files } = this.state;
+      const req = request.delete(`${apiPrefix}/photo/${id}`);
+
+      files.splice(files.findIndex((item) => item._id === id), 1);
+      this.setState({files});
+
+
+      req.end((err, res) => {
+        if (err) {
+          //alert('Wrong remove. Try again');
+          return console.log('returned error:', err);
+        }
+
+        return console.log('Photo removed.');
+      });
+    }
+
+
+  }
+
 
   render() {
-    const { files, description, photoType, loading } = this.state;
-    console.log('work');
+    const { files, description, type, loading } = this.state;
 
     return (
       <Spinner loading={loading}>
-        <section>
+        <div className="container">
           <div className="dropzone">
             <Dropzone onDrop={this.onDrop} onDropRejected={this.onDropRejected} multiple accept="image/jpeg">
               <p>Try dropping some files here, or click to select files to upload.</p>
             </Dropzone>
           </div>
-          <aside>
+          <div className="container">
             <h2>Dropped files</h2>
 
-            <button onClick={this.onSave}>Save</button>
+            <Button onClick={this.onSave}>Save</Button>
 
-            <select name='type' id='type' onChange={this.onSelectValue}>
-              <option selected value={false}>Select photo type</option>
-              <option value="lovestory">LoveStore</option>
-              <option value="wedding">Wedding</option>
-              <option value="children">Children</option>
-            </select>
-
-            <input type="text" id="description" name="description" value={description} onChange={this.onChangeInput('description')}/>
+            <Row>
+              <Input s={6} type="text" label="Description" id="description" onChange={this.onChangeInput('description')}
+                     validate/>
+            </Row>
+            <Row>
+              <Input
+                name='type'
+                type='checkbox'
+                value='wedding'
+                label='Wedding'
+                checked={type == 'wedding' ? true : false}
+                onChange={this.onChangeInput('type')}
+              />
+              <Input name='type'
+                     type='checkbox'
+                     value='lovestory'
+                     label='Lovestory'
+                     checked={type == 'lovestory' ? true : false}
+                     onChange={this.onChangeInput('type')}
+              />
+              <Input
+                name='type'
+                type='checkbox'
+                value='children'
+                label='Children'
+                checked={type == 'children' ? true : false}
+                onChange={this.onChangeInput('type')}
+              />
+            </Row>
 
             <PhotoCollections images={files} onRemove={() => console.log('try remove') } />
-          </aside>
 
-        </section>
+          </div>
+        </div>
       </Spinner>
 
     );

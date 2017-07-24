@@ -34,16 +34,25 @@ app.use(cors({origin: '*'}));
 app.get('/all', (req, res) => {
   db.listPhotos().then(data => res.send(data));
 });
-//
-//app.post('/photos', (req, res) => {
-//    db.createNote(req.body).then(data => res.send(data));
-//});
-//
+
+app.get('/wedding', (req, res) => {
+  db.photosByType('wedding').then(data => res.send(data));
+});
+
+app.get('/lovestory', (req, res) => {
+  db.photosByType('lovestory').then(data => res.send(data));
+});
+
+app.get('/children', (req, res) => {
+  db.photosByType('children').then(data => res.send(data));
+});
 
 
-//app.delete('/photos/:id', (req, res) => {
-//  db.deleteNote(req.params.id).then(data => res.send(data));
-//});
+
+
+app.delete('/photos/:id', (req, res) => {
+  db.deletePhoto(req.params.id).then(data => res.send(data));
+});
 
 app.post('/upload', multipartMiddleware, function (req, res) {
   const { files, query } = req;
