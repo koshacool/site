@@ -18,7 +18,7 @@ class PhotoCollections extends React.Component {
         <CollectionItem key={f.lastModified}>
           <img width="150px" src={f.preview} />
           {f.name} - {f.size} bytes
-          <Button flat  waves='light' icon='clear' onClick={onRemove(f._id)} />
+          <Button flat  waves='light' icon='clear' onClick={onRemove(f.lastModified)} />
 
         </CollectionItem>
       ));

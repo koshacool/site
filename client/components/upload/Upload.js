@@ -1,11 +1,12 @@
 import React from 'react';
 import Dropzone from 'react-dropzone';
 import request from 'superagent';
-import { Button, Row, Input, Icon, } from 'react-materialize';
+//import { Icon } from 'react-materialize';
 
 import { apiPrefix } from '../../../etc/config.json';
 import Spinner from '../spiner/Spinner';
 import PhotoCollections from './PhotoCollections';
+import SaveParams from './SaveParams';
 
 const randomSymbols = (n) => Math.random().toString(36).slice(2, 2 + Math.max(1, Math.min(n, 25)));
 
@@ -74,18 +75,22 @@ class Upload extends React.Component {
       const { files } = this.state;
       const req = request.delete(`${apiPrefix}/photo/${id}`);
 
-      files.splice(files.findIndex((item) => item._id === id), 1);
-      this.setState({files});
+      files.splice(files.findIndex((item) => item.lastModified === id), 1);
+      this.setState({ files });
 
 
-      req.end((err, res) => {
-        if (err) {
-          //alert('Wrong remove. Try again');
-          return console.log('returned error:', err);
-        }
+      //req.end((err, res) => {
+      //  if (err) {
+      //    //alert('Wrong remove. Try again');
+      //    return console.log('returned error:', err);
+      //  }
 
-        return console.log('Photo removed.');
-      });
+
+      //});
+
+      console.log('Photo removed.');
+
+      console.log(files, id)
     }
 
 
@@ -99,48 +104,19 @@ class Upload extends React.Component {
       <Spinner loading={loading}>
         <div className="container">
           <div className="dropzone">
+            <h2>drop files here</h2>
             <Dropzone onDrop={this.onDrop} onDropRejected={this.onDropRejected} multiple accept="image/jpeg">
               <p>Try dropping some files here, or click to select files to upload.</p>
             </Dropzone>
           </div>
-          <div className="container">
-            <h2>Dropped files</h2>
 
-            <Button onClick={this.onSave}>Save</Button>
+          {files.length > 0 && (
+            <div className="container">
+              <SaveParams onSave={this.onSave} onChangeInput={this.onChangeInput} type={type}/>
+              <PhotoCollections images={files} onRemove={this.onRemove}/>
+            </div>
+          )}
 
-            <Row>
-              <Input s={6} type="text" label="Description" id="description" onChange={this.onChangeInput('description')}
-                     validate/>
-            </Row>
-            <Row>
-              <Input
-                name='type'
-                type='checkbox'
-                value='wedding'
-                label='Wedding'
-                checked={type == 'wedding' ? true : false}
-                onChange={this.onChangeInput('type')}
-              />
-              <Input name='type'
-                     type='checkbox'
-                     value='lovestory'
-                     label='Lovestory'
-                     checked={type == 'lovestory' ? true : false}
-                     onChange={this.onChangeInput('type')}
-              />
-              <Input
-                name='type'
-                type='checkbox'
-                value='children'
-                label='Children'
-                checked={type == 'children' ? true : false}
-                onChange={this.onChangeInput('type')}
-              />
-            </Row>
-
-            <PhotoCollections images={files} onRemove={() => console.log('try remove') } />
-
-          </div>
         </div>
       </Spinner>
 

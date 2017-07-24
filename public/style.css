@@ -16,6 +16,10 @@ nav ul a, nav .brand-logo {
     color: #444
 }
 
+.dropzone {
+    margin-bottom: 20px;
+}
+
 /*img {*/
     /*max-width: 200px;*/
 
