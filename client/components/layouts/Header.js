@@ -4,7 +4,7 @@ import { Navbar, NavItem } from 'react-materialize';
 import {Link} from 'react-router';
 import Logo from './Logo';
 
-const SiteFooter = () => (
+const Header = () => (
   <Navbar
     brand="HOME"
     className="grey lighten-3 grey-text text-darken-4 "
@@ -28,4 +28,4 @@ const SiteFooter = () => (
   </Navbar>
 );
 
-export default SiteFooter;
+export default Header;

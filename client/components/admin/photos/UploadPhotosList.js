@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, Collection, CollectionItem } from 'react-materialize';
 
 
-class PhotoCollections extends React.Component {
+class UploadPhotosList extends React.Component {
   constructor() {
     super();
 
@@ -26,6 +26,7 @@ class PhotoCollections extends React.Component {
 
 
   render() {
+    console.log(this.props.location)
     return (
       <Collection header='Photos List'>
         { this.renderPhotos() }
@@ -37,9 +38,9 @@ class PhotoCollections extends React.Component {
 }
 
 
-PhotoCollections.propTypes = {
+UploadPhotosList.propTypes = {
   images: PropTypes.array.isRequired,
   onRemove: PropTypes.func.isRequired
 };
 
-export default PhotoCollections;
+export default UploadPhotosList;

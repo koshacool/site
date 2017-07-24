@@ -3,9 +3,9 @@ import Dropzone from 'react-dropzone';
 import request from 'superagent';
 //import { Icon } from 'react-materialize';
 
-import { apiPrefix } from '../../../etc/config.json';
-import Spinner from '../spiner/Spinner';
-import PhotoCollections from './PhotoCollections';
+import { apiPrefix } from '../../../../etc/config.json';
+import Spinner from '../../spiner/Spinner';
+import UploadPhotosList from '../photos/UploadPhotosList';
 import SaveParams from './SaveParams';
 
 const randomSymbols = (n) => Math.random().toString(36).slice(2, 2 + Math.max(1, Math.min(n, 25)));
@@ -16,8 +16,7 @@ class Upload extends React.Component {
     this.state = {
       files: [],
       description: '',
-      type: 'wedding',
-      loading: false
+      type: 'wedding'
     };
 
     this.onDrop = this.onDrop.bind(this);
@@ -73,7 +72,7 @@ class Upload extends React.Component {
   onRemove(id) {
     return () => {
       const { files } = this.state;
-      const req = request.delete(`${apiPrefix}/photo/${id}`);
+      //const req = request.delete(`${apiPrefix}/photo/${id}`);
 
       files.splice(files.findIndex((item) => item.lastModified === id), 1);
       this.setState({ files });
@@ -98,10 +97,10 @@ class Upload extends React.Component {
 
 
   render() {
-    const { files, description, type, loading } = this.state;
+    const { files, description, type } = this.state;
 
     return (
-      <Spinner loading={loading}>
+
         <div className="container">
           <div className="dropzone">
             <h2>drop files here</h2>
@@ -113,12 +112,12 @@ class Upload extends React.Component {
           {files.length > 0 && (
             <div className="container">
               <SaveParams onSave={this.onSave} onChangeInput={this.onChangeInput} type={type}/>
-              <PhotoCollections images={files} onRemove={this.onRemove}/>
+              <UploadPhotosList images={files} onRemove={this.onRemove}/>
             </div>
           )}
 
         </div>
-      </Spinner>
+
 
     );
   }
