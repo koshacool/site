@@ -31,19 +31,19 @@ app.use(cors({origin: '*'}));
 
 
 // RESTful api handlers
-app.get('/all', (req, res) => {
+app.get('/get/all', (req, res) => {
   db.listPhotos().then(data => res.send(data));
 });
 
-app.get('/wedding', (req, res) => {
+app.get('/get/wedding', (req, res) => {
   db.photosByType('wedding').then(data => res.send(data));
 });
 
-app.get('/lovestory', (req, res) => {
+app.get('/get/lovestory', (req, res) => {
   db.photosByType('lovestory').then(data => res.send(data));
 });
 
-app.get('/children', (req, res) => {
+app.get('/get/children', (req, res) => {
   db.photosByType('children').then(data => res.send(data));
 });
 

@@ -5,24 +5,24 @@ import { apiPrefix } from '../../etc/config.json';
 
 export default {
   listPhotos() {
-    return request.get(`${apiPrefix}/all`);
+    return request.get(`${apiPrefix}/get/all`);
   },
 
   weddingPhotos() {
-    return request.get(`${apiPrefix}/wedding`);
+    return request.get(`${apiPrefix}/get/wedding`);
   },
 
   lovestoryPhotos() {
-    return request.get(`${apiPrefix}/lovestory`);
+    return request.get(`${apiPrefix}/get/lovestory`);
   },
 
   childrenPhotos() {
-    return request.get(`${apiPrefix}/children`);
+    return request.get(`${apiPrefix}/get/children`);
   },
 
-  createPhotos(data) {
-    return axios.post(`${apiPrefix}/photos`, data);
-  },
+  //createPhotos(data) {
+  //  return axios.post(`${apiPrefix}/get/photos`, data);
+  //},
 
   deletePhotos(photoId) {
     return axios.delete(`${apiPrefix}/remove/${photoId}`);

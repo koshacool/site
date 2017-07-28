@@ -55670,27 +55670,27 @@
 
 	exports['default'] = {
 	  listPhotos: function listPhotos() {
-	    return _superagent2['default'].get(_etcConfigJson.apiPrefix + '/all');
+	    return _superagent2['default'].get(_etcConfigJson.apiPrefix + '/get/all');
 	  },
 
 	  weddingPhotos: function weddingPhotos() {
-	    return _superagent2['default'].get(_etcConfigJson.apiPrefix + '/wedding');
+	    return _superagent2['default'].get(_etcConfigJson.apiPrefix + '/get/wedding');
 	  },
 
 	  lovestoryPhotos: function lovestoryPhotos() {
-	    return _superagent2['default'].get(_etcConfigJson.apiPrefix + '/lovestory');
+	    return _superagent2['default'].get(_etcConfigJson.apiPrefix + '/get/lovestory');
 	  },
 
 	  childrenPhotos: function childrenPhotos() {
-	    return _superagent2['default'].get(_etcConfigJson.apiPrefix + '/children');
+	    return _superagent2['default'].get(_etcConfigJson.apiPrefix + '/get/children');
 	  },
 
-	  createPhotos: function createPhotos(data) {
-	    return _axios2['default'].post(_etcConfigJson.apiPrefix + '/photos', data);
-	  },
+	  //createPhotos(data) {
+	  //  return axios.post(`${apiPrefix}/get/photos`, data);
+	  //},
 
-	  deletePhotos: function deletePhotos(noteId) {
-	    return _axios2['default']['delete'](_etcConfigJson.apiPrefix + '/photos/' + noteId);
+	  deletePhotos: function deletePhotos(photoId) {
+	    return _axios2['default']['delete'](_etcConfigJson.apiPrefix + '/remove/' + photoId);
 	  }
 	};
 	module.exports = exports['default'];
@@ -60715,19 +60715,35 @@
 	  _createClass(EditWedding, [{
 	    key: 'onRemove',
 	    value: function onRemove(id) {
+	      var _this = this;
+
 	      return function () {
-	        return console.log(id);
+	        (0, _api.deletePhotos)(id).then(function (res) {
+	          return _this.getPhotos();
+	        })['catch'](function (err) {
+	          return console.log(err);
+	        });
 	      };
 	    }
 	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      var _this = this;
+	      this.getPhotos();
+	    }
+	  }, {
+	    key: 'getPhotos',
+	    value: function getPhotos() {
+	      var _this2 = this;
 
 	      (0, _api.weddingPhotos)().then(function (_ref) {
 	        var text = _ref.text;
-	        return _this.setState({
-	          photos: JSON.parse(text), loading: false
+
+	        var photos = JSON.parse(text);
+	        var loading = photos.length == 0;
+
+	        _this2.setState({
+	          photos: photos,
+	          loading: loading
 	        });
 	      })['catch'](function (err) {
 	        return console.log('Error: ', err);
@@ -60736,12 +60752,12 @@
 	  }, {
 	    key: 'renderPhotos',
 	    value: function renderPhotos() {
-	      var _this2 = this;
+	      var _this3 = this;
 
 	      var photos = this.state.photos;
 
 	      return photos.map(function (photo) {
-	        return _react2['default'].createElement(_photosPhotoItem2['default'], { photo: photo, key: photo._id, onRemove: _this2.onRemove });
+	        return _react2['default'].createElement(_photosPhotoItem2['default'], { photo: photo, key: photo._id, onRemove: _this3.onRemove });
 	      });
 	    }
 	  }, {
@@ -60751,7 +60767,6 @@
 	      var photos = _state.photos;
 	      var loading = _state.loading;
 
-	      console.log(photos, loading);
 	      return _react2['default'].createElement(
 	        'div',
 	        { className: 'container' },
@@ -60842,8 +60857,12 @@
 	        _react2['default'].createElement(
 	          _reactMaterialize.CollectionItem,
 	          null,
-	          _react2['default'].createElement('img', { width: '150px', src: _etcConfigJson.apiPrefix + '/' + photo.title }),
-	          _react2['default'].createElement(_reactMaterialize.Button, { flat: true, waves: 'light', icon: 'clear', onClick: onRemove(photo._id) })
+	          _react2['default'].createElement(
+	            'div',
+	            { className: 'container' },
+	            _react2['default'].createElement('img', { width: '150px', src: _etcConfigJson.apiPrefix + '/' + photo.title }),
+	            _react2['default'].createElement(_reactMaterialize.Button, { flat: true, waves: 'light', icon: 'clear', onClick: onRemove(photo._id) })
+	          )
 	        )
 	      );
 	    }
@@ -60904,13 +60923,13 @@
 
 	var _photosPhotoItem2 = _interopRequireDefault(_photosPhotoItem);
 
-	var EditWedding = (function (_React$Component) {
-	  _inherits(EditWedding, _React$Component);
+	var EditLovestory = (function (_React$Component) {
+	  _inherits(EditLovestory, _React$Component);
 
-	  function EditWedding() {
-	    _classCallCheck(this, EditWedding);
+	  function EditLovestory() {
+	    _classCallCheck(this, EditLovestory);
 
-	    _get(Object.getPrototypeOf(EditWedding.prototype), 'constructor', this).call(this);
+	    _get(Object.getPrototypeOf(EditLovestory.prototype), 'constructor', this).call(this);
 
 	    this.state = {
 	      photos: [],
@@ -60920,22 +60939,38 @@
 	    this.onRemove = this.onRemove.bind(this);
 	  }
 
-	  _createClass(EditWedding, [{
+	  _createClass(EditLovestory, [{
 	    key: 'onRemove',
 	    value: function onRemove(id) {
+	      var _this = this;
+
 	      return function () {
-	        return console.log(id);
+	        (0, _api.deletePhotos)(id).then(function (res) {
+	          return _this.getPhotos();
+	        })['catch'](function (err) {
+	          return console.log(err);
+	        });
 	      };
 	    }
 	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      var _this = this;
+	      this.getPhotos();
+	    }
+	  }, {
+	    key: 'getPhotos',
+	    value: function getPhotos() {
+	      var _this2 = this;
 
 	      (0, _api.lovestoryPhotos)().then(function (_ref) {
 	        var text = _ref.text;
-	        return _this.setState({
-	          photos: JSON.parse(text), loading: false
+
+	        var photos = JSON.parse(text);
+	        var loading = photos.length == 0;
+
+	        _this2.setState({
+	          photos: photos,
+	          loading: loading
 	        });
 	      })['catch'](function (err) {
 	        return console.log('Error: ', err);
@@ -60944,12 +60979,12 @@
 	  }, {
 	    key: 'renderPhotos',
 	    value: function renderPhotos() {
-	      var _this2 = this;
+	      var _this3 = this;
 
 	      var photos = this.state.photos;
 
 	      return photos.map(function (photo) {
-	        return _react2['default'].createElement(_photosPhotoItem2['default'], { photo: photo, key: photo._id, onRemove: _this2.onRemove });
+	        return _react2['default'].createElement(_photosPhotoItem2['default'], { photo: photo, key: photo._id, onRemove: _this3.onRemove });
 	      });
 	    }
 	  }, {
@@ -60959,7 +60994,6 @@
 	      var photos = _state.photos;
 	      var loading = _state.loading;
 
-	      console.log(photos, loading);
 	      return _react2['default'].createElement(
 	        'div',
 	        { className: 'container' },
@@ -60976,10 +61010,10 @@
 	    }
 	  }]);
 
-	  return EditWedding;
+	  return EditLovestory;
 	})(_react2['default'].Component);
 
-	exports['default'] = EditWedding;
+	exports['default'] = EditLovestory;
 	module.exports = exports['default'];
 
 /***/ }),
@@ -61026,13 +61060,13 @@
 
 	var _photosPhotoItem2 = _interopRequireDefault(_photosPhotoItem);
 
-	var EditWedding = (function (_React$Component) {
-	  _inherits(EditWedding, _React$Component);
+	var EditChildren = (function (_React$Component) {
+	  _inherits(EditChildren, _React$Component);
 
-	  function EditWedding() {
-	    _classCallCheck(this, EditWedding);
+	  function EditChildren() {
+	    _classCallCheck(this, EditChildren);
 
-	    _get(Object.getPrototypeOf(EditWedding.prototype), 'constructor', this).call(this);
+	    _get(Object.getPrototypeOf(EditChildren.prototype), 'constructor', this).call(this);
 
 	    this.state = {
 	      photos: [],
@@ -61042,22 +61076,38 @@
 	    this.onRemove = this.onRemove.bind(this);
 	  }
 
-	  _createClass(EditWedding, [{
+	  _createClass(EditChildren, [{
 	    key: 'onRemove',
 	    value: function onRemove(id) {
+	      var _this = this;
+
 	      return function () {
-	        return console.log(id);
+	        (0, _api.deletePhotos)(id).then(function (res) {
+	          return _this.getPhotos();
+	        })['catch'](function (err) {
+	          return console.log(err);
+	        });
 	      };
 	    }
 	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      var _this = this;
+	      this.getPhotos();
+	    }
+	  }, {
+	    key: 'getPhotos',
+	    value: function getPhotos() {
+	      var _this2 = this;
 
 	      (0, _api.childrenPhotos)().then(function (_ref) {
 	        var text = _ref.text;
-	        return _this.setState({
-	          photos: JSON.parse(text), loading: false
+
+	        var photos = JSON.parse(text);
+	        var loading = photos.length == 0;
+
+	        _this2.setState({
+	          photos: photos,
+	          loading: loading
 	        });
 	      })['catch'](function (err) {
 	        return console.log('Error: ', err);
@@ -61066,12 +61116,12 @@
 	  }, {
 	    key: 'renderPhotos',
 	    value: function renderPhotos() {
-	      var _this2 = this;
+	      var _this3 = this;
 
 	      var photos = this.state.photos;
 
 	      return photos.map(function (photo) {
-	        return _react2['default'].createElement(_photosPhotoItem2['default'], { photo: photo, key: photo._id, onRemove: _this2.onRemove });
+	        return _react2['default'].createElement(_photosPhotoItem2['default'], { photo: photo, key: photo._id, onRemove: _this3.onRemove });
 	      });
 	    }
 	  }, {
@@ -61081,7 +61131,6 @@
 	      var photos = _state.photos;
 	      var loading = _state.loading;
 
-	      console.log(photos, loading);
 	      return _react2['default'].createElement(
 	        'div',
 	        { className: 'container' },
@@ -61098,10 +61147,10 @@
 	    }
 	  }]);
 
-	  return EditWedding;
+	  return EditChildren;
 	})(_react2['default'].Component);
 
-	exports['default'] = EditWedding;
+	exports['default'] = EditChildren;
 	module.exports = exports['default'];
 
 /***/ })

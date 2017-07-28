@@ -53,7 +53,7 @@ class Upload extends React.Component {
     req.query(about);
 
     files.forEach(file => {
-      req.attach(randomSymbols(15), file);
+      req.attach(randomSymbols(15), file);//Create random name for each file
     });
 
     req.end((err, res) => {
@@ -72,24 +72,9 @@ class Upload extends React.Component {
   onRemove(id) {
     return () => {
       const { files } = this.state;
-      //const req = request.delete(`${apiPrefix}/photo/${id}`);
 
       files.splice(files.findIndex((item) => item.lastModified === id), 1);
       this.setState({ files });
-
-
-      //req.end((err, res) => {
-      //  if (err) {
-      //    //alert('Wrong remove. Try again');
-      //    return console.log('returned error:', err);
-      //  }
-
-
-      //});
-
-      console.log('Photo removed.');
-
-      console.log(files, id)
     }
 
 
