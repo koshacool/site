@@ -5,6 +5,7 @@ import Masonry from 'masonry-layout';
 import Spinner from '../spiner/Spinner';
 import { lovestoryPhotos } from '../../api';
 import PhotoItem from './PhotoItem';
+import MasanryConfig from '../MasanryConfig';
 
 class LoveStory extends React.Component {
   constructor() {
@@ -35,11 +36,7 @@ class LoveStory extends React.Component {
     let count = counter();
 
     if (count === photos.length) {
-      const msnry = new Masonry('.grid', {
-        itemSelector: '.grid-item',
-        columnWidth: 200,
-        gutter: 10
-      });
+      const msnry = new Masonry('.grid', MasanryConfig);
     }
   }
 

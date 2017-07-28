@@ -4,7 +4,8 @@ import Masonry from 'masonry-layout';
 
 import Spinner from '../spiner/Spinner';
 import { listPhotos } from '../../api';
-import PhotoItem from './PhotoItem';
+import FolderItem from './FolderItem';
+import MasanryConfig from '../MasanryConfig';
 
 class Photosession extends React.Component {
   constructor() {
@@ -21,7 +22,7 @@ class Photosession extends React.Component {
     const { photos } = this.state;
 
     return photos
-      .map(photo => <PhotoItem src={photo.title} key={photo._id} onLoad={this.startMasonry}/>);
+      .map(photo => <FolderItem src={photo.title} key={photo._id} onLoad={this.startMasonry}/>);
   }
 
 
@@ -30,11 +31,7 @@ class Photosession extends React.Component {
     let count = counter();
 
     if (count === photos.length) {
-      const msnry = new Masonry('.grid', {
-        itemSelector: '.grid-item',
-        columnWidth: 350,
-        gutter: 10
-      });
+      const msnry = new Masonry('.grid', MasanryConfig);
     }
   }
 

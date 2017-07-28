@@ -43,31 +43,31 @@ nav ul a, nav .brand-logo {
     overflow: hidden;
     margin-bottom: 10px;
     width: 350px;
-    height: 175px;
-    /*max-width: 350px;*/
-    /*max-height: 300px;*/
     float: left;
 }
 
-.grid-item:hover {
-    background-color: rgba(0, 0, 0, 1);
-}
 
 .grid-item img {
+    width: 350px;
+}
+
+.image {
+    width: 350px;
+    height: 175px;
+}
+
+/*Zoom img*/
+.image img {
+    width: 350px;
+    height: 175px;
     /*Image zoom*/
     -moz-transition: all 1s ease-out;
     -o-transition: all 1s ease-out;
     -webkit-transition: all 1s ease-out;
 
-    width: 350px;
-    height: 175px;
-    margin-bottom: 10px;
-    /*max-width: 350px;*/
-
-    background-color: rgba(0, 0, 0, 0.6);
 }
 
-.grid-item img:hover {
+.image img:hover {
     /*Image zoom*/
     -webkit-transform: scale(1.1);
     -moz-transform: scale(1.1);
