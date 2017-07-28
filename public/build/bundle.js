@@ -19800,23 +19800,27 @@
 
 	var _componentsPhotosChildren2 = _interopRequireDefault(_componentsPhotosChildren);
 
-	var _componentsAdminAdmin = __webpack_require__(505);
+	var _componentsPhotosPhotosession = __webpack_require__(505);
+
+	var _componentsPhotosPhotosession2 = _interopRequireDefault(_componentsPhotosPhotosession);
+
+	var _componentsAdminAdmin = __webpack_require__(506);
 
 	var _componentsAdminAdmin2 = _interopRequireDefault(_componentsAdminAdmin);
 
-	var _componentsAdminUploadUpload = __webpack_require__(507);
+	var _componentsAdminUploadUpload = __webpack_require__(508);
 
 	var _componentsAdminUploadUpload2 = _interopRequireDefault(_componentsAdminUploadUpload);
 
-	var _componentsAdminEditEditWedding = __webpack_require__(511);
+	var _componentsAdminEditEditWedding = __webpack_require__(512);
 
 	var _componentsAdminEditEditWedding2 = _interopRequireDefault(_componentsAdminEditEditWedding);
 
-	var _componentsAdminEditEditLovestory = __webpack_require__(513);
+	var _componentsAdminEditEditLovestory = __webpack_require__(514);
 
 	var _componentsAdminEditEditLovestory2 = _interopRequireDefault(_componentsAdminEditEditLovestory);
 
-	var _componentsAdminEditEditChildren = __webpack_require__(514);
+	var _componentsAdminEditEditChildren = __webpack_require__(515);
 
 	var _componentsAdminEditEditChildren2 = _interopRequireDefault(_componentsAdminEditEditChildren);
 
@@ -19831,7 +19835,8 @@
 	      _react2['default'].createElement(_reactRouter.Route, { path: 'photos', component: _componentsPhotosPhotosList2['default'] }),
 	      _react2['default'].createElement(_reactRouter.Route, { path: 'wedding', component: _componentsPhotosWedding2['default'] }),
 	      _react2['default'].createElement(_reactRouter.Route, { path: 'lovestory', component: _componentsPhotosLoveStory2['default'] }),
-	      _react2['default'].createElement(_reactRouter.Route, { path: 'children', component: _componentsPhotosChildren2['default'] })
+	      _react2['default'].createElement(_reactRouter.Route, { path: 'children', component: _componentsPhotosChildren2['default'] }),
+	      _react2['default'].createElement(_reactRouter.Route, { path: 'photosession', component: _componentsPhotosPhotosession2['default'] })
 	    ),
 	    _react2['default'].createElement(
 	      _reactRouter.Route,
@@ -53019,15 +53024,6 @@
 	      { className: 'grey-text text-darken-4 right', href: '/photos' },
 	      _react2['default'].createElement(
 	        _reactRouter.Link,
-	        { to: '/wedding' },
-	        'Wedding'
-	      )
-	    ),
-	    _react2['default'].createElement(
-	      _reactMaterialize.NavItem,
-	      { className: 'grey-text text-darken-4 right', href: '/photos' },
-	      _react2['default'].createElement(
-	        _reactRouter.Link,
 	        { to: '/lovestory' },
 	        'Lovestory'
 	      )
@@ -53039,6 +53035,24 @@
 	        _reactRouter.Link,
 	        { to: '/children' },
 	        'Children'
+	      )
+	    ),
+	    _react2['default'].createElement(
+	      _reactMaterialize.NavItem,
+	      { className: 'grey-text text-darken-4 right', href: '/photos' },
+	      _react2['default'].createElement(
+	        _reactRouter.Link,
+	        { to: '/wedding' },
+	        'Wedding'
+	      )
+	    ),
+	    _react2['default'].createElement(
+	      _reactMaterialize.NavItem,
+	      { className: 'grey-text text-darken-4 right', href: '/photos' },
+	      _react2['default'].createElement(
+	        _reactRouter.Link,
+	        { to: '/photosession' },
+	        'Photosession'
 	      )
 	    )
 	  );
@@ -59274,9 +59288,137 @@
 
 	var _propTypes2 = _interopRequireDefault(_propTypes);
 
+	var _masonryLayout = __webpack_require__(467);
+
+	var _masonryLayout2 = _interopRequireDefault(_masonryLayout);
+
+	var _spinerSpinner = __webpack_require__(231);
+
+	var _spinerSpinner2 = _interopRequireDefault(_spinerSpinner);
+
+	var _api = __webpack_require__(474);
+
+	var _PhotoItem = __webpack_require__(501);
+
+	var _PhotoItem2 = _interopRequireDefault(_PhotoItem);
+
+	var Photosession = (function (_React$Component) {
+	  _inherits(Photosession, _React$Component);
+
+	  function Photosession() {
+	    _classCallCheck(this, Photosession);
+
+	    _get(Object.getPrototypeOf(Photosession.prototype), 'constructor', this).call(this);
+	    this.state = {
+	      photos: []
+	    };
+
+	    this.startMasonry = this.startMasonry.bind(this, this.counter());
+	    this.renderPhotos = this.renderPhotos.bind(this);
+	  }
+
+	  _createClass(Photosession, [{
+	    key: 'renderPhotos',
+	    value: function renderPhotos() {
+	      var _this = this;
+
+	      var photos = this.state.photos;
+
+	      return photos.map(function (photo) {
+	        return _react2['default'].createElement(_PhotoItem2['default'], { src: photo.title, key: photo._id, onLoad: _this.startMasonry });
+	      });
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var _this2 = this;
+
+	      (0, _api.listPhotos)().then(function (_ref) {
+	        var text = _ref.text;
+	        return _this2.setState({ photos: JSON.parse(text) });
+	      });
+	    }
+	  }, {
+	    key: 'startMasonry',
+	    value: function startMasonry(counter) {
+	      var photos = this.state.photos;
+
+	      var count = counter();
+
+	      if (count === photos.length) {
+	        var msnry = new _masonryLayout2['default']('.grid', {
+	          itemSelector: '.grid-item',
+	          columnWidth: 200,
+	          gutter: 10
+	        });
+	      }
+	    }
+	  }, {
+	    key: 'counter',
+	    value: function counter() {
+	      var currentCount = 0;
+
+	      return function () {
+	        currentCount++;
+	        return currentCount;
+	      };
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var photos = this.state.photos;
+
+	      var loading = photos.length === 0;
+
+	      return _react2['default'].createElement(
+	        'div',
+	        { className: 'container' },
+	        _react2['default'].createElement(
+	          _spinerSpinner2['default'],
+	          { loading: loading, className: 'grid', id: 'grid' },
+	          !loading && this.renderPhotos()
+	        )
+	      );
+	    }
+	  }]);
+
+	  return Photosession;
+	})(_react2['default'].Component);
+
+	exports['default'] = Photosession;
+	module.exports = exports['default'];
+
+/***/ }),
+/* 506 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _propTypes = __webpack_require__(163);
+
+	var _propTypes2 = _interopRequireDefault(_propTypes);
+
 	var _reactMaterialize = __webpack_require__(237);
 
-	var _AdminHeader = __webpack_require__(506);
+	var _AdminHeader = __webpack_require__(507);
 
 	var _AdminHeader2 = _interopRequireDefault(_AdminHeader);
 
@@ -59314,7 +59456,7 @@
 	module.exports = exports['default'];
 
 /***/ }),
-/* 506 */
+/* 507 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59355,16 +59497,16 @@
 	    ),
 	    _react2['default'].createElement(
 	      _reactMaterialize.NavItem,
-	      { className: 'grey-text text-darken-4 right', href: '/admin/wedding' },
+	      { className: 'grey-text text-darken-4 right' },
 	      _react2['default'].createElement(
 	        _reactRouter.Link,
-	        { to: '/admin/wedding' },
-	        'Wedding'
+	        { to: '/admin/children' },
+	        'Children'
 	      )
 	    ),
 	    _react2['default'].createElement(
 	      _reactMaterialize.NavItem,
-	      { className: 'grey-text text-darken-4 right', href: '/admin/lovestory' },
+	      { className: 'grey-text text-darken-4 right' },
 	      _react2['default'].createElement(
 	        _reactRouter.Link,
 	        { to: '/admin/lovestory' },
@@ -59373,11 +59515,20 @@
 	    ),
 	    _react2['default'].createElement(
 	      _reactMaterialize.NavItem,
-	      { className: 'grey-text text-darken-4 right', href: '/admin/children' },
+	      { className: 'grey-text text-darken-4 right' },
 	      _react2['default'].createElement(
 	        _reactRouter.Link,
-	        { to: '/admin/children' },
-	        'Children'
+	        { to: '/admin/wedding' },
+	        'Wedding'
+	      )
+	    ),
+	    _react2['default'].createElement(
+	      _reactMaterialize.NavItem,
+	      { className: 'grey-text text-darken-4 right' },
+	      _react2['default'].createElement(
+	        _reactRouter.Link,
+	        { to: '/admin/photosession' },
+	        'Photosession'
 	      )
 	    )
 	  );
@@ -59387,7 +59538,7 @@
 	module.exports = exports['default'];
 
 /***/ }),
-/* 507 */
+/* 508 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59412,7 +59563,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactDropzone = __webpack_require__(508);
+	var _reactDropzone = __webpack_require__(509);
 
 	var _reactDropzone2 = _interopRequireDefault(_reactDropzone);
 
@@ -59428,11 +59579,11 @@
 
 	var _spinerSpinner2 = _interopRequireDefault(_spinerSpinner);
 
-	var _photosUploadPhotosList = __webpack_require__(509);
+	var _photosUploadPhotosList = __webpack_require__(510);
 
 	var _photosUploadPhotosList2 = _interopRequireDefault(_photosUploadPhotosList);
 
-	var _SaveParams = __webpack_require__(510);
+	var _SaveParams = __webpack_require__(511);
 
 	var _SaveParams2 = _interopRequireDefault(_SaveParams);
 
@@ -59503,7 +59654,7 @@
 	      req.query(about);
 
 	      files.forEach(function (file) {
-	        req.attach(randomSymbols(15), file);
+	        req.attach(randomSymbols(15), file); //Create random name for each file
 	      });
 
 	      req.end(function (err, res) {
@@ -59526,24 +59677,10 @@
 	      return function () {
 	        var files = _this3.state.files;
 
-	        //const req = request.delete(`${apiPrefix}/photo/${id}`);
-
 	        files.splice(files.findIndex(function (item) {
 	          return item.lastModified === id;
 	        }), 1);
 	        _this3.setState({ files: files });
-
-	        //req.end((err, res) => {
-	        //  if (err) {
-	        //    //alert('Wrong remove. Try again');
-	        //    return console.log('returned error:', err);
-	        //  }
-
-	        //});
-
-	        console.log('Photo removed.');
-
-	        console.log(files, id);
 	      };
 	    }
 	  }, {
@@ -59592,7 +59729,7 @@
 	module.exports = exports['default'];
 
 /***/ }),
-/* 508 */
+/* 509 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	(function webpackUniversalModuleDefinition(root, factory) {
@@ -60489,7 +60626,7 @@
 	//# sourceMappingURL=index.js.map
 
 /***/ }),
-/* 509 */
+/* 510 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -60573,7 +60710,7 @@
 	module.exports = exports['default'];
 
 /***/ }),
-/* 510 */
+/* 511 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -60653,7 +60790,7 @@
 	module.exports = exports['default'];
 
 /***/ }),
-/* 511 */
+/* 512 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -60676,7 +60813,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactDropzone = __webpack_require__(508);
+	var _reactDropzone = __webpack_require__(509);
 
 	var _reactDropzone2 = _interopRequireDefault(_reactDropzone);
 
@@ -60692,7 +60829,7 @@
 
 	var _spinerSpinner2 = _interopRequireDefault(_spinerSpinner);
 
-	var _photosPhotoItem = __webpack_require__(512);
+	var _photosPhotoItem = __webpack_require__(513);
 
 	var _photosPhotoItem2 = _interopRequireDefault(_photosPhotoItem);
 
@@ -60790,7 +60927,7 @@
 	module.exports = exports['default'];
 
 /***/ }),
-/* 512 */
+/* 513 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -60880,7 +61017,7 @@
 	module.exports = exports['default'];
 
 /***/ }),
-/* 513 */
+/* 514 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -60903,7 +61040,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactDropzone = __webpack_require__(508);
+	var _reactDropzone = __webpack_require__(509);
 
 	var _reactDropzone2 = _interopRequireDefault(_reactDropzone);
 
@@ -60919,7 +61056,7 @@
 
 	var _spinerSpinner2 = _interopRequireDefault(_spinerSpinner);
 
-	var _photosPhotoItem = __webpack_require__(512);
+	var _photosPhotoItem = __webpack_require__(513);
 
 	var _photosPhotoItem2 = _interopRequireDefault(_photosPhotoItem);
 
@@ -61017,7 +61154,7 @@
 	module.exports = exports['default'];
 
 /***/ }),
-/* 514 */
+/* 515 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -61040,7 +61177,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactDropzone = __webpack_require__(508);
+	var _reactDropzone = __webpack_require__(509);
 
 	var _reactDropzone2 = _interopRequireDefault(_reactDropzone);
 
@@ -61056,7 +61193,7 @@
 
 	var _spinerSpinner2 = _interopRequireDefault(_spinerSpinner);
 
-	var _photosPhotoItem = __webpack_require__(512);
+	var _photosPhotoItem = __webpack_require__(513);
 
 	var _photosPhotoItem2 = _interopRequireDefault(_photosPhotoItem);
 

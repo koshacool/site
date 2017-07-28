@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Spinner from '../spiner/Spinner';
 
 
-class PhotoItem extends React.Component {
+class FolderItem extends React.Component {
   constructor() {
     super();
 
@@ -22,18 +22,18 @@ class PhotoItem extends React.Component {
     const { src, onLoad } = this.props;
 
     return (
-      <Spinner loading={loading} className="grid-item">
-
-        <img src={src} onLoad={onLoad}/>
-
+      <Spinner loading={loading}>
+        <div className="image grid-item" id="image">
+          <img src={src}  onLoad={onLoad}/>
+        </div>
       </Spinner>
     );
   }
 }
 
-PhotoItem.propTypes = {
+FolderItem.propTypes = {
   src: PropTypes.string.isRequired
 };
 
 
-export default PhotoItem;
+export default FolderItem;

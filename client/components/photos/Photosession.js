@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import Masonry from 'masonry-layout';
 
 import Spinner from '../spiner/Spinner';
-import { childrenPhotos } from '../../api';
-import PhotoItem from './PhotoItem';
+import { listPhotos } from '../../api';
+import FolderItem from './FolderItem';
 import MasanryConfig from '../MasanryConfig';
 
-class Children extends React.Component {
+class Photosession extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -22,14 +22,9 @@ class Children extends React.Component {
     const { photos } = this.state;
 
     return photos
-      .map(photo => <PhotoItem src={photo.title} key={photo._id} onLoad={this.startMasonry}/>);
+      .map(photo => <FolderItem src={photo.title} key={photo._id} onLoad={this.startMasonry}/>);
   }
 
-  componentDidMount() {
-    childrenPhotos()
-      .then(({ text }) => this.setState({photos: JSON.parse(text)}));
-
-  }
 
   startMasonry(counter) {
     const { photos } = this.state;
@@ -49,6 +44,11 @@ class Children extends React.Component {
     }
   }
 
+  componentDidMount() {
+    listPhotos()
+      .then(({ text }) => this.setState({photos: JSON.parse(text)}));
+
+  }
 
   render() {
     const { photos } = this.state;
@@ -59,10 +59,11 @@ class Children extends React.Component {
         <Spinner loading={loading} className="grid" id="grid">
           { !loading && this.renderPhotos() }
         </Spinner>
+
       </div>
     );
   }
 }
 
 
-export default Children;
+export default Photosession;
