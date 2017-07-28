@@ -22,8 +22,10 @@ class PhotoItem extends React.Component {
     const { src, onLoad } = this.props;
 
     return (
-      <Spinner loading={loading} >
-        <img src={src}  className="grid-item" onLoad={onLoad} />
+      <Spinner loading={loading}>
+        <div className="image grid-item" id="image">
+          <img src={src}  onLoad={onLoad}/>
+        </div>
       </Spinner>
     );
   }

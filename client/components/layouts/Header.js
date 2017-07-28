@@ -15,14 +15,18 @@ const Header = () => (
     <NavItem className="grey-text text-darken-4 right" href='/photos'>
       <Link to="/photos" >Photos</Link>
     </NavItem>
-    <NavItem className="grey-text text-darken-4 right" href='/photos'>
-      <Link to="/wedding" >Wedding</Link>
-    </NavItem>
+
     <NavItem className="grey-text text-darken-4 right" href='/photos'>
       <Link to="/lovestory" >Lovestory</Link>
     </NavItem>
     <NavItem className="grey-text text-darken-4 right" href='/photos'>
       <Link to="/children" >Children</Link>
+    </NavItem>
+    <NavItem className="grey-text text-darken-4 right" href='/photos'>
+      <Link to="/wedding" >Wedding</Link>
+    </NavItem>
+    <NavItem className="grey-text text-darken-4 right" href='/photos'>
+      <Link to="/photosession" >Photosession</Link>
     </NavItem>
 
   </Navbar>
