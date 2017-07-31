@@ -19788,39 +19788,39 @@
 
 	var _componentsPhotosPhotosList2 = _interopRequireDefault(_componentsPhotosPhotosList);
 
-	var _componentsPhotosWedding = __webpack_require__(502);
+	var _componentsPhotosWedding = __webpack_require__(503);
 
 	var _componentsPhotosWedding2 = _interopRequireDefault(_componentsPhotosWedding);
 
-	var _componentsPhotosLoveStory = __webpack_require__(503);
+	var _componentsPhotosLoveStory = __webpack_require__(504);
 
 	var _componentsPhotosLoveStory2 = _interopRequireDefault(_componentsPhotosLoveStory);
 
-	var _componentsPhotosChildren = __webpack_require__(504);
+	var _componentsPhotosChildren = __webpack_require__(505);
 
 	var _componentsPhotosChildren2 = _interopRequireDefault(_componentsPhotosChildren);
 
-	var _componentsPhotosPhotosession = __webpack_require__(505);
+	var _componentsPhotosPhotosession = __webpack_require__(506);
 
 	var _componentsPhotosPhotosession2 = _interopRequireDefault(_componentsPhotosPhotosession);
 
-	var _componentsAdminAdmin = __webpack_require__(506);
+	var _componentsAdminAdmin = __webpack_require__(508);
 
 	var _componentsAdminAdmin2 = _interopRequireDefault(_componentsAdminAdmin);
 
-	var _componentsAdminUploadUpload = __webpack_require__(508);
+	var _componentsAdminUploadUpload = __webpack_require__(510);
 
 	var _componentsAdminUploadUpload2 = _interopRequireDefault(_componentsAdminUploadUpload);
 
-	var _componentsAdminEditEditWedding = __webpack_require__(512);
+	var _componentsAdminEditEditWedding = __webpack_require__(514);
 
 	var _componentsAdminEditEditWedding2 = _interopRequireDefault(_componentsAdminEditEditWedding);
 
-	var _componentsAdminEditEditLovestory = __webpack_require__(514);
+	var _componentsAdminEditEditLovestory = __webpack_require__(516);
 
 	var _componentsAdminEditEditLovestory2 = _interopRequireDefault(_componentsAdminEditEditLovestory);
 
-	var _componentsAdminEditEditChildren = __webpack_require__(515);
+	var _componentsAdminEditEditChildren = __webpack_require__(517);
 
 	var _componentsAdminEditEditChildren2 = _interopRequireDefault(_componentsAdminEditEditChildren);
 
@@ -53193,6 +53193,10 @@
 
 	var _PhotoItem2 = _interopRequireDefault(_PhotoItem);
 
+	var _MasanryConfig = __webpack_require__(502);
+
+	var _MasanryConfig2 = _interopRequireDefault(_MasanryConfig);
+
 	var PhotosList = (function (_React$Component) {
 	  _inherits(PhotosList, _React$Component);
 
@@ -53237,11 +53241,7 @@
 	      var count = counter();
 
 	      if (count === photos.length) {
-	        var msnry = new _masonryLayout2['default']('.grid', {
-	          itemSelector: '.grid-item',
-	          columnWidth: 200,
-	          gutter: 10
-	        });
+	        var msnry = new _masonryLayout2['default']('.grid', _MasanryConfig2['default']);
 	      }
 	    }
 	  }, {
@@ -58860,8 +58860,8 @@
 
 	      return _react2['default'].createElement(
 	        _spinerSpinner2['default'],
-	        { loading: loading },
-	        _react2['default'].createElement('img', { src: src, className: 'grid-item', onLoad: onLoad })
+	        { loading: loading, className: 'grid-item' },
+	        _react2['default'].createElement('img', { src: src, onLoad: onLoad })
 	      );
 	    }
 	  }]);
@@ -58878,6 +58878,22 @@
 
 /***/ }),
 /* 502 */
+/***/ (function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	exports['default'] = {
+	  itemSelector: '.grid-item',
+	  columnWidth: 350,
+	  gutter: 10
+	};
+	module.exports = exports['default'];
+
+/***/ }),
+/* 503 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58917,6 +58933,10 @@
 	var _PhotoItem = __webpack_require__(501);
 
 	var _PhotoItem2 = _interopRequireDefault(_PhotoItem);
+
+	var _MasanryConfig = __webpack_require__(502);
+
+	var _MasanryConfig2 = _interopRequireDefault(_MasanryConfig);
 
 	var Wedding = (function (_React$Component) {
 	  _inherits(Wedding, _React$Component);
@@ -58962,11 +58982,7 @@
 	      var count = counter();
 
 	      if (count === photos.length) {
-	        var msnry = new _masonryLayout2['default']('.grid', {
-	          itemSelector: '.grid-item',
-	          columnWidth: 200,
-	          gutter: 10
-	        });
+	        var msnry = new _masonryLayout2['default']('.grid', _MasanryConfig2['default']);
 	      }
 	    }
 	  }, {
@@ -59005,7 +59021,7 @@
 	module.exports = exports['default'];
 
 /***/ }),
-/* 503 */
+/* 504 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59045,6 +59061,10 @@
 	var _PhotoItem = __webpack_require__(501);
 
 	var _PhotoItem2 = _interopRequireDefault(_PhotoItem);
+
+	var _MasanryConfig = __webpack_require__(502);
+
+	var _MasanryConfig2 = _interopRequireDefault(_MasanryConfig);
 
 	var LoveStory = (function (_React$Component) {
 	  _inherits(LoveStory, _React$Component);
@@ -59090,11 +59110,7 @@
 	      var count = counter();
 
 	      if (count === photos.length) {
-	        var msnry = new _masonryLayout2['default']('.grid', {
-	          itemSelector: '.grid-item',
-	          columnWidth: 200,
-	          gutter: 10
-	        });
+	        var msnry = new _masonryLayout2['default']('.grid', _MasanryConfig2['default']);
 	      }
 	    }
 	  }, {
@@ -59133,7 +59149,7 @@
 	module.exports = exports['default'];
 
 /***/ }),
-/* 504 */
+/* 505 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59173,6 +59189,10 @@
 	var _PhotoItem = __webpack_require__(501);
 
 	var _PhotoItem2 = _interopRequireDefault(_PhotoItem);
+
+	var _MasanryConfig = __webpack_require__(502);
+
+	var _MasanryConfig2 = _interopRequireDefault(_MasanryConfig);
 
 	var Children = (function (_React$Component) {
 	  _inherits(Children, _React$Component);
@@ -59218,11 +59238,7 @@
 	      var count = counter();
 
 	      if (count === photos.length) {
-	        var msnry = new _masonryLayout2['default']('.grid', {
-	          itemSelector: '.grid-item',
-	          columnWidth: 200,
-	          gutter: 10
-	        });
+	        var msnry = new _masonryLayout2['default']('.grid', _MasanryConfig2['default']);
 	      }
 	    }
 	  }, {
@@ -59261,7 +59277,7 @@
 	module.exports = exports['default'];
 
 /***/ }),
-/* 505 */
+/* 506 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59298,9 +59314,13 @@
 
 	var _api = __webpack_require__(474);
 
-	var _PhotoItem = __webpack_require__(501);
+	var _FolderItem = __webpack_require__(507);
 
-	var _PhotoItem2 = _interopRequireDefault(_PhotoItem);
+	var _FolderItem2 = _interopRequireDefault(_FolderItem);
+
+	var _MasanryConfig = __webpack_require__(502);
+
+	var _MasanryConfig2 = _interopRequireDefault(_MasanryConfig);
 
 	var Photosession = (function (_React$Component) {
 	  _inherits(Photosession, _React$Component);
@@ -59325,17 +59345,7 @@
 	      var photos = this.state.photos;
 
 	      return photos.map(function (photo) {
-	        return _react2['default'].createElement(_PhotoItem2['default'], { src: photo.title, key: photo._id, onLoad: _this.startMasonry });
-	      });
-	    }
-	  }, {
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      var _this2 = this;
-
-	      (0, _api.listPhotos)().then(function (_ref) {
-	        var text = _ref.text;
-	        return _this2.setState({ photos: JSON.parse(text) });
+	        return _react2['default'].createElement(_FolderItem2['default'], { src: photo.title, key: photo._id, onLoad: _this.startMasonry });
 	      });
 	    }
 	  }, {
@@ -59346,11 +59356,7 @@
 	      var count = counter();
 
 	      if (count === photos.length) {
-	        var msnry = new _masonryLayout2['default']('.grid', {
-	          itemSelector: '.grid-item',
-	          columnWidth: 200,
-	          gutter: 10
-	        });
+	        var msnry = new _masonryLayout2['default']('.grid', _MasanryConfig2['default']);
 	      }
 	    }
 	  }, {
@@ -59362,6 +59368,16 @@
 	        currentCount++;
 	        return currentCount;
 	      };
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var _this2 = this;
+
+	      (0, _api.listPhotos)().then(function (_ref) {
+	        var text = _ref.text;
+	        return _this2.setState({ photos: JSON.parse(text) });
+	      });
 	    }
 	  }, {
 	    key: 'render',
@@ -59389,7 +59405,87 @@
 	module.exports = exports['default'];
 
 /***/ }),
-/* 506 */
+/* 507 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _propTypes = __webpack_require__(163);
+
+	var _propTypes2 = _interopRequireDefault(_propTypes);
+
+	var _spinerSpinner = __webpack_require__(231);
+
+	var _spinerSpinner2 = _interopRequireDefault(_spinerSpinner);
+
+	var FolderItem = (function (_React$Component) {
+	  _inherits(FolderItem, _React$Component);
+
+	  function FolderItem() {
+	    _classCallCheck(this, FolderItem);
+
+	    _get(Object.getPrototypeOf(FolderItem.prototype), 'constructor', this).call(this);
+
+	    this.state = {
+	      loading: true
+	    };
+	  }
+
+	  _createClass(FolderItem, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.setState({ loading: false });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var loading = this.state.loading;
+	      var _props = this.props;
+	      var src = _props.src;
+	      var onLoad = _props.onLoad;
+
+	      return _react2['default'].createElement(
+	        _spinerSpinner2['default'],
+	        { loading: loading },
+	        _react2['default'].createElement(
+	          'div',
+	          { className: 'image grid-item', id: 'image' },
+	          _react2['default'].createElement('img', { src: src, onLoad: onLoad })
+	        )
+	      );
+	    }
+	  }]);
+
+	  return FolderItem;
+	})(_react2['default'].Component);
+
+	FolderItem.propTypes = {
+	  src: _propTypes2['default'].string.isRequired
+	};
+
+	exports['default'] = FolderItem;
+	module.exports = exports['default'];
+
+/***/ }),
+/* 508 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59418,7 +59514,7 @@
 
 	var _reactMaterialize = __webpack_require__(237);
 
-	var _AdminHeader = __webpack_require__(507);
+	var _AdminHeader = __webpack_require__(509);
 
 	var _AdminHeader2 = _interopRequireDefault(_AdminHeader);
 
@@ -59456,7 +59552,7 @@
 	module.exports = exports['default'];
 
 /***/ }),
-/* 507 */
+/* 509 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59538,7 +59634,7 @@
 	module.exports = exports['default'];
 
 /***/ }),
-/* 508 */
+/* 510 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59563,7 +59659,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactDropzone = __webpack_require__(509);
+	var _reactDropzone = __webpack_require__(511);
 
 	var _reactDropzone2 = _interopRequireDefault(_reactDropzone);
 
@@ -59579,11 +59675,11 @@
 
 	var _spinerSpinner2 = _interopRequireDefault(_spinerSpinner);
 
-	var _photosUploadPhotosList = __webpack_require__(510);
+	var _photosUploadPhotosList = __webpack_require__(512);
 
 	var _photosUploadPhotosList2 = _interopRequireDefault(_photosUploadPhotosList);
 
-	var _SaveParams = __webpack_require__(511);
+	var _SaveParams = __webpack_require__(513);
 
 	var _SaveParams2 = _interopRequireDefault(_SaveParams);
 
@@ -59729,7 +59825,7 @@
 	module.exports = exports['default'];
 
 /***/ }),
-/* 509 */
+/* 511 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	(function webpackUniversalModuleDefinition(root, factory) {
@@ -60626,7 +60722,7 @@
 	//# sourceMappingURL=index.js.map
 
 /***/ }),
-/* 510 */
+/* 512 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -60710,7 +60806,7 @@
 	module.exports = exports['default'];
 
 /***/ }),
-/* 511 */
+/* 513 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -60790,7 +60886,7 @@
 	module.exports = exports['default'];
 
 /***/ }),
-/* 512 */
+/* 514 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -60813,7 +60909,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactDropzone = __webpack_require__(509);
+	var _reactDropzone = __webpack_require__(511);
 
 	var _reactDropzone2 = _interopRequireDefault(_reactDropzone);
 
@@ -60829,7 +60925,7 @@
 
 	var _spinerSpinner2 = _interopRequireDefault(_spinerSpinner);
 
-	var _photosPhotoItem = __webpack_require__(513);
+	var _photosPhotoItem = __webpack_require__(515);
 
 	var _photosPhotoItem2 = _interopRequireDefault(_photosPhotoItem);
 
@@ -60927,7 +61023,7 @@
 	module.exports = exports['default'];
 
 /***/ }),
-/* 513 */
+/* 515 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -61017,7 +61113,7 @@
 	module.exports = exports['default'];
 
 /***/ }),
-/* 514 */
+/* 516 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -61040,7 +61136,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactDropzone = __webpack_require__(509);
+	var _reactDropzone = __webpack_require__(511);
 
 	var _reactDropzone2 = _interopRequireDefault(_reactDropzone);
 
@@ -61056,7 +61152,7 @@
 
 	var _spinerSpinner2 = _interopRequireDefault(_spinerSpinner);
 
-	var _photosPhotoItem = __webpack_require__(513);
+	var _photosPhotoItem = __webpack_require__(515);
 
 	var _photosPhotoItem2 = _interopRequireDefault(_photosPhotoItem);
 
@@ -61154,7 +61250,7 @@
 	module.exports = exports['default'];
 
 /***/ }),
-/* 515 */
+/* 517 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -61177,7 +61273,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactDropzone = __webpack_require__(509);
+	var _reactDropzone = __webpack_require__(511);
 
 	var _reactDropzone2 = _interopRequireDefault(_reactDropzone);
 
@@ -61193,7 +61289,7 @@
 
 	var _spinerSpinner2 = _interopRequireDefault(_spinerSpinner);
 
-	var _photosPhotoItem = __webpack_require__(513);
+	var _photosPhotoItem = __webpack_require__(515);
 
 	var _photosPhotoItem2 = _interopRequireDefault(_photosPhotoItem);
 
