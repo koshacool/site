@@ -3,6 +3,7 @@ import config from '../../etc/config.json';
 import '../models';
 
 const Photo = mongoose.model('Photos');
+const Photosession = mongoose.model('Photosession');
 
 export function setUpConnection() {
   const { host, port, name } = config.db;
@@ -20,20 +21,45 @@ export function photosByType(type) {
   return Photo.find({type});
 }
 
-export function createPhoto({ title, description, type }) {
+export function createPhoto({ title, type }) {
   const photo = new Photo({
     title,
-    description,
     type,
     createdAt: new Date()
   });
 
-  return photo.save()
-    .then(console.log('db saved'))
-    .catch(err => console.log('error:', err));
+  return photo.save();
+    //.then(console.log('db saved'))
+    //.catch(err => console.log('error:', err));
 }
 
 export function deletePhoto(id) {
   return Photo.findById(id).remove();
+}
+
+
+export function createPhotosession({ cover, description, photos }) {
+  const photosession = new Photosession({
+    cover,
+    description,
+    photos,
+    createdAt: new Date()
+  });
+
+  return photosession.save()
+    .then(console.log('photosession saved'))
+    .catch(err => console.log('error:', err));
+}
+
+export function listPhotosession() {
+  return Photosession.find();
+}
+
+export function PhotosessionById(id) {
+  return Photosession.find({ _id: id });
+}
+
+export function deletePhotosession(id) {
+  return Photosession.findById(id).remove();
 }
 

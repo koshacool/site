@@ -4,7 +4,7 @@ mongoose.Promise = global.Promise;
 let PhotoSchema = mongoose.Schema({
   title: { type: String, required: true },
   type: { type: String },
-  description: { type: String },
+  //description: { type: String },
   createdAt: { type: Date, default: Date.now }
 });
 

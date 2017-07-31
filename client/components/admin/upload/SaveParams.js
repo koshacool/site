@@ -4,15 +4,20 @@ import { Button, Row, Input } from 'react-materialize';
 
 
 const SaveParams = ({ onSave, onChangeInput, type }) => {
+
   return (
     <div>
       <Button onClick={onSave}>Save</Button>
 
       <Row>
-        <Input s={6} type="text" label="Description" id="description" onChange={onChangeInput('description')}
-               validate/>
-      </Row>
-      <Row>
+        <Input
+          name='type'
+          type='checkbox'
+          value='photosession'
+          label='Photosession'
+          checked={type == 'photosession' ? true : false}
+          onChange={onChangeInput('type')}
+        />
         <Input
           name='type'
           type='checkbox'
@@ -37,6 +42,14 @@ const SaveParams = ({ onSave, onChangeInput, type }) => {
           onChange={onChangeInput('type')}
         />
       </Row>
+
+      {type == 'photosession' && (
+        <Row>
+          <Input s={6} type="text" label="Description" id="description" onChange={onChangeInput('description')}
+                 validate/>
+        </Row>
+      )}
+
     </div>
   )
 };

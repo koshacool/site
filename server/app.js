@@ -54,6 +54,7 @@ app.delete('/remove/:id', (req, res) => {
 app.post('/upload', multipartMiddleware, function (req, res) {
   const { files, query } = req;
   const photosNames = Object.keys(files);
+  let createdPhoto = [];
 
   const moveFile = function (from, to) {
     const source = fs.createReadStream(from);
@@ -63,32 +64,32 @@ app.post('/upload', multipartMiddleware, function (req, res) {
       source.on('end', resolve);
       source.on('error', reject);
       source.pipe(dest);
-    });
+    })
   };
 
+
   new Promise((resolve, reject) => {
-    photosNames.forEach((photo, i) => {
-      moveFile(files[photo].path, path.join(__dirname, `../public/images/${files[photo].fieldName}.jpg`))
-        .then(fs.unlink(files[photo].path))
-        .then(db.createPhoto({
-          title: `images/${files[photo].fieldName}.jpg`,
-          type: query.type,
-          description: query.description,
-          date: new Date()
-        }))
+    let arrOfPromises = photosNames.map((photo, i) => {
+      return moveFile(files[photo].path, path.join(__dirname, `../public/images/${files[photo].fieldName}.jpg`))//move file
+        .then(fs.unlink(files[photo].path))//remove file
         .then(() => {
-          if (i == photosNames.length - 1) {
-            resolve();
-          }
-        })
-        .catch(err => {
-          reject(err);
-        });
+          return db.createPhoto({
+            title: `images/${files[photo].fieldName}.jpg`,
+            type: query.type,
+            date: new Date()
+          })
+        })//Save foto in db
     });
+
+    return Promise.all(arrOfPromises);
   })
-    .then(res.send('saved'))
-    .catch(err => console.log(err));
+    .then(arrayOfResults => {
+      console.log(arrayOfResults);
+      //res.send(createdPhoto);
+    })
+    .catch(console.log.bind(console))
 });
+
 
 app.get('*', function (req, res) {
   res.sendFile(path.join(__dirname, '../public/index.html'));
