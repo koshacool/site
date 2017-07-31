@@ -53,7 +53,6 @@ class Upload extends React.Component {
       .then((res) => {
         //savedPhotosId = JSON.parse(text);
         alert('saved');
-        console.log(res)
         this.setState({
           loading: false,
           files: []

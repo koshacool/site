@@ -54,7 +54,7 @@ app.delete('/remove/:id', (req, res) => {
 app.post('/upload', multipartMiddleware, function (req, res) {
   const { files, query } = req;
   const photosNames = Object.keys(files);
-  let createdPhoto = [];
+
 
   const moveFile = function (from, to) {
     const source = fs.createReadStream(from);
@@ -79,14 +79,15 @@ app.post('/upload', multipartMiddleware, function (req, res) {
             date: new Date()
           })
         })//Save foto in db
+        .catch(reject)
     });
 
-    return Promise.all(arrOfPromises);
+    resolve(Promise.all(arrOfPromises));
   })
-    .then(arrayOfResults => {
-      console.log(arrayOfResults);
-      //res.send(createdPhoto);
+    .then(arrOfResult => {
+      return arrOfResult.map(obj => obj._id);
     })
+    .then(arr => res.send(arr))
     .catch(console.log.bind(console))
 });
 

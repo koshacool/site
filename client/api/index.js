@@ -48,7 +48,22 @@ export default {
 
 
   createPhotosession(files, type) {
+    return new Promise((resolve, reject) => {
+      const req = request.post(`${apiPrefix}/upload`);
+      req.query({type});
 
+      files.forEach(file => {
+        req.attach(randomSymbols(15), file);//Create random name for each file
+      });
+
+      req.end((err, res) => {
+        if (err) {
+          reject(new Error(err));
+        }
+
+        resolve(res);
+      });
+    });
   },
 
 }
