@@ -42,6 +42,10 @@ export function PhotoById(id) {
   return Photo.findOne({ _id: id});
 }
 
+export function PhotoByPhotosessionId(id) {
+  return Photo.find({ photosessionId: id});
+}
+
 
 
 

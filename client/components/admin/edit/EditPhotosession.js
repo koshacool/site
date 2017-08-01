@@ -2,7 +2,7 @@ import React from 'react';
 import Dropzone from 'react-dropzone';
 import request from 'superagent';
 import { Collection } from 'react-materialize';
-import { photosessionPhotos, deletePhotos } from '../../../api';
+import { photosessionPhotos, deletePhotosession } from '../../../api';
 
 import Spinner from '../../spiner/Spinner';
 import PhotoItem from '../photos/PhotoItem';
@@ -21,11 +21,9 @@ class EditPhotosession extends React.Component {
   }
 
   onRemove(id) {
-    return () => {
-      deletePhotos(id)
-        .then(res => this.getPhotos())
-        .catch(err => console.log(err));
-    }
+    return deletePhotosession(id)
+      .then(res => this.getPhotos())
+      .catch(err => console.log(err));
   }
 
   componentDidMount() {

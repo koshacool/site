@@ -26,7 +26,7 @@ export default {
   },
 
   deletePhotos(photoId) {
-    return axios.delete(`${apiPrefix}/remove/${photoId}`);
+    return axios.delete(`${apiPrefix}/photo/${photoId}`);
   },
 
 
@@ -64,6 +64,10 @@ export default {
 
   photosessionPhotos() {
     return request.get(`${apiPrefix}/get/photosession`);
+  },
+
+  deletePhotosession(id) {
+    return axios.delete(`${apiPrefix}/photosession/${id}`);
   },
 
 }

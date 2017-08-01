@@ -52,11 +52,30 @@ app.get('/get/photosession', (req, res) => {
 });
 
 
-app.delete('/remove/:id', (req, res) => {
+app.delete('/photo/:id', (req, res) => {
   db.PhotoById(req.params.id)
     .then(res => fs.unlink(path.join(__dirname, `../public/${res.title}`)))//delete foto in folder
     .then(() => db.deletePhoto(req.params.id))//delete note in db
-    .then(data => res.send(data));//return result
+    .then(data => res.send(data))//return result
+    .catch(err => console.log('Error: ', err));
+});
+
+app.delete('/photosession/:id', (req, res) => {
+  const id = req.params.id;
+  db.deletePhotosession(id)
+    .then(() => db.PhotoByPhotosessionId(id))
+    .then((data) => {
+      let arrOfPromisses = data.map(photo => {
+        return db.PhotoById(photo._id)
+          .then(res => fs.unlink(path.join(__dirname, `../public/${res.title}`)))//delete foto in folder
+          .then(() => db.deletePhoto(photo._id))//delete note in db
+          .then(data => res.send(data))//return result
+          .catch(err => console.log('Error: ', err));
+      })
+     return Promise.all(arrOfPromises);
+    })
+    .then(data => res.send(data))//return result
+  .catch(err => console.log('Error: ', err));
 });
 
 app.post('/upload', multipartMiddleware, function (req, res) {
