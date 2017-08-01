@@ -52,9 +52,7 @@ export function createPhotosession({ cover, description, photos }) {
     createdAt: new Date()
   });
 
-  return photosession.save()
-    .then(console.log('photosession saved'))
-    .catch(err => console.log('error:', err));
+  return photosession.save();
 }
 
 export function listPhotosession() {

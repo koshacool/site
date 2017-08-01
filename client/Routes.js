@@ -14,7 +14,7 @@ import Upload from './components/admin/upload/Upload';
 import EditWedding from './components/admin/edit/EditWedding';
 import EditLovestory from './components/admin/edit/EditLovestory';
 import EditChildren from './components/admin/edit/EditChildren';
-
+import EditPhotosession from './components/admin/edit/EditPhotosession';
 
 const renderRoutes = () => (
   <Router history={browserHistory}>
@@ -32,6 +32,7 @@ const renderRoutes = () => (
       <Route path="wedding" component={EditWedding}/>
       <Route path="lovestory" component={EditLovestory}/>
       <Route path="children" component={EditChildren}/>
+      <Route path="photosession" component={EditPhotosession}/>
     </Route>
   </Router >
 );

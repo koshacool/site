@@ -2,7 +2,7 @@ import React from 'react';
 import Dropzone from 'react-dropzone';
 import request from 'superagent';
 //import { Icon } from 'react-materialize';
-import { createPhotos } from '../../../api';
+import { createPhotos, createPhotosession } from '../../../api';
 import { apiPrefix } from '../../../../etc/config.json';
 import Spinner from '../../spiner/Spinner';
 import UploadPhotosList from '../photos/UploadPhotosList';
@@ -24,12 +24,12 @@ class Upload extends React.Component {
       renamedCover: ''
     };
 
-    this.onDrop = this.onDrop.bind(this);
-    this.onSave = this.onSave.bind(this);
+    this.onDrop        = this.onDrop.bind(this);
+    this.onSave        = this.onSave.bind(this);
     this.onChangeInput = this.onChangeInput.bind(this);
     this.onSelectValue = this.onSelectValue.bind(this);
-    this.onRemove = this.onRemove.bind(this);
-    this.changeNames = this.changeNames.bind(this);
+    this.onRemove      = this.onRemove.bind(this);
+    this.changeNames   = this.changeNames.bind(this);
   }
 
   onDrop(files) {
@@ -52,22 +52,22 @@ class Upload extends React.Component {
 
   onSave() {
     this.setState({loading: true});
-    const { files, description, type, cover } = this.state;
     const filesObj = this.changeNames();
+    const { files, description, type } = this.state;
 
     createPhotos(filesObj, type)
       .then((res) => {
+        return res.body;
+      })
+      .then(res => {
         alert('saved');
         this.setState({
           loading: false,
           files: []
         });
-        return res.body;
-      })
-      .then(res => {
-        console.log(res)
-        if (type == 'photosession') {
 
+        if (type == 'photosession') {
+          return createPhotosession(this.state.renamedCover, description, res);
         }
       })
       .catch(err => {
@@ -92,12 +92,11 @@ class Upload extends React.Component {
     let filesObj = {};
 
     files.forEach(file => {
+      let name = randomSymbols(15);
+      filesObj[name] = file;
+
       if (type == 'photosession' && file.lastModified == cover ) {
-        let name = `cover${randomSymbols(15)}`;
-        filesObj[name] = file;
         this.setState({renamedCover: name});
-      } else {
-        filesObj[randomSymbols(15)] = file;
       }
     });
 
@@ -106,7 +105,7 @@ class Upload extends React.Component {
 
 
   render() {
-    const { files, description, type, loading } = this.state;
+    const { files, description, type, loading, cover } = this.state;
 
     return (
       <div className="container">
@@ -121,7 +120,13 @@ class Upload extends React.Component {
           {files.length > 0 && (
             <div className="container">
               <SaveParams onSave={this.onSave} onChangeInput={this.onChangeInput} type={type}/>
-              <UploadPhotosList images={files} onRemove={this.onRemove}/>
+              <UploadPhotosList
+                images={files}
+                onRemove={this.onRemove}
+                type={type}
+                onCheckbox={this.onChangeInput}
+                cover={cover}
+              />
             </div>
           )}
         </Spinner>

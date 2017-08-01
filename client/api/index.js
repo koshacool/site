@@ -47,14 +47,10 @@ export default {
   },
 
 
-  createPhotosession(files, type) {
+  createPhotosession(photoName, description, photos) {
     return new Promise((resolve, reject) => {
       const req = request.post(`${apiPrefix}/photosession`);
-      req.query({type});
-
-      files.forEach(file => {
-        req.attach(randomSymbols(15), file);//Create random name for each file
-      });
+      req.query({cover: `images/${photoName}.jpg`, description, photos});
 
       req.end((err, res) => {
         if (err) {
@@ -64,6 +60,10 @@ export default {
         resolve(res);
       });
     });
+  },
+
+  photosessionPhotos() {
+    return request.get(`${apiPrefix}/get/photosession`);
   },
 
 }

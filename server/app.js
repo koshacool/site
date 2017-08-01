@@ -45,19 +45,23 @@ app.get('/get/lovestory', (req, res) => {
 
 app.get('/get/children', (req, res) => {
   db.photosByType('children').then(data => res.send(data));
+})
+
+app.get('/get/photosession', (req, res) => {
+  db.listPhotosession().then(data => res.send(data));
 });
+
 
 app.delete('/remove/:id', (req, res) => {
   db.PhotoById(req.params.id)
-    .then(res => fs.unlink(path.join(__dirname, `../public/${res.title}`)))
-    .then(() => db.deletePhoto(req.params.id))
-    .then(data => res.send(data));
+    .then(res => fs.unlink(path.join(__dirname, `../public/${res.title}`)))//delete foto in folder
+    .then(() => db.deletePhoto(req.params.id))//delete note in db
+    .then(data => res.send(data));//return result
 });
 
 app.post('/upload', multipartMiddleware, function (req, res) {
   const { files, query } = req;
   const photosNames = Object.keys(files);
-
 
   const moveFile = function (from, to) {
     const source = fs.createReadStream(from);
@@ -92,6 +96,16 @@ app.post('/upload', multipartMiddleware, function (req, res) {
     })
     .then(arr => res.send(arr))
     .catch(console.log.bind(console))
+});
+
+app.post('/photosession', multipartMiddleware, function (req, res) {
+  new Promise((resolve, reject) => {
+    db.createPhotosession(req.query)
+      .then(result => resolve(result))
+      .catch(err => reject(err));
+  })
+    .then(result => res.send(result))
+    .catch(console.log.bind(console));
 });
 
 
