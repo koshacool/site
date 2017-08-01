@@ -21,7 +21,7 @@ class EditPhotosession extends React.Component {
   }
 
   onRemove(id) {
-    return deletePhotosession(id)
+    return () => deletePhotosession(id)
       .then(res => this.getPhotos())
       .catch(err => console.log(err));
   }
