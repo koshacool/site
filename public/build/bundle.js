@@ -55682,7 +55682,34 @@
 
 	var _etcConfigJson = __webpack_require__(500);
 
+	var randomSymbols = function randomSymbols(n) {
+	  return Math.random().toString(36).slice(2, 2 + Math.max(1, Math.min(n, 25)));
+	};
+
 	exports['default'] = {
+	  createPhotos: function createPhotos(files, type) {
+	    return new Promise(function (resolve, reject) {
+	      var req = _superagent2['default'].post(_etcConfigJson.apiPrefix + '/upload');
+	      req.query({ type: type });
+
+	      files.forEach(function (file) {
+	        req.attach(randomSymbols(15), file); //Create random name for each file
+	      });
+
+	      req.end(function (err, res) {
+	        if (err) {
+	          reject(new Error(err));
+	        }
+
+	        resolve(res);
+	      });
+	    });
+	  },
+
+	  deletePhotos: function deletePhotos(photoId) {
+	    return _axios2['default']['delete'](_etcConfigJson.apiPrefix + '/remove/' + photoId);
+	  },
+
 	  listPhotos: function listPhotos() {
 	    return _superagent2['default'].get(_etcConfigJson.apiPrefix + '/get/all');
 	  },
@@ -55699,13 +55726,25 @@
 	    return _superagent2['default'].get(_etcConfigJson.apiPrefix + '/get/children');
 	  },
 
-	  //createPhotos(data) {
-	  //  return axios.post(`${apiPrefix}/get/photos`, data);
-	  //},
+	  createPhotosession: function createPhotosession(files, type) {
+	    return new Promise(function (resolve, reject) {
+	      var req = _superagent2['default'].post(_etcConfigJson.apiPrefix + '/upload');
+	      req.query({ type: type });
 
-	  deletePhotos: function deletePhotos(photoId) {
-	    return _axios2['default']['delete'](_etcConfigJson.apiPrefix + '/remove/' + photoId);
+	      files.forEach(function (file) {
+	        req.attach(randomSymbols(15), file); //Create random name for each file
+	      });
+
+	      req.end(function (err, res) {
+	        if (err) {
+	          reject(new Error(err));
+	        }
+
+	        resolve(res);
+	      });
+	    });
 	  }
+
 	};
 	module.exports = exports['default'];
 
@@ -59669,6 +59708,8 @@
 
 	//import { Icon } from 'react-materialize';
 
+	var _api = __webpack_require__(474);
+
 	var _etcConfigJson = __webpack_require__(500);
 
 	var _spinerSpinner = __webpack_require__(231);
@@ -59683,10 +59724,6 @@
 
 	var _SaveParams2 = _interopRequireDefault(_SaveParams);
 
-	var randomSymbols = function randomSymbols(n) {
-	  return Math.random().toString(36).slice(2, 2 + Math.max(1, Math.min(n, 25)));
-	};
-
 	var Upload = (function (_React$Component) {
 	  _inherits(Upload, _React$Component);
 
@@ -59695,6 +59732,7 @@
 
 	    _get(Object.getPrototypeOf(Upload.prototype), 'constructor', this).call(this);
 	    this.state = {
+	      loading: false,
 	      files: [],
 	      description: '',
 	      type: 'wedding'
@@ -59744,25 +59782,18 @@
 	      var description = _state.description;
 	      var type = _state.type;
 
-	      var about = { description: description, type: type };
+	      var savedPhotosId = [];
 
-	      var req = _superagent2['default'].post(_etcConfigJson.apiPrefix + '/upload');
-	      req.query(about);
-
-	      files.forEach(function (file) {
-	        req.attach(randomSymbols(15), file); //Create random name for each file
-	      });
-
-	      req.end(function (err, res) {
-	        _this2.setState({ loading: false });
-	        if (err) {
-	          alert('Wrong saving. Try again');
-	          return console.log('returned error:', err);
-	        }
-	        _this2.setState({ files: [] });
-	        alert(res.text);
-
-	        return;
+	      (0, _api.createPhotos)(files, type).then(function (res) {
+	        //savedPhotosId = JSON.parse(text);
+	        alert('saved');
+	        _this2.setState({
+	          loading: false,
+	          files: []
+	        });
+	      })['catch'](function (err) {
+	        console.log(err);
+	        alert('Wrong saving. Try again');
 	      });
 	    }
 	  }, {
@@ -59786,6 +59817,7 @@
 	      var files = _state2.files;
 	      var description = _state2.description;
 	      var type = _state2.type;
+	      var loading = _state2.loading;
 
 	      return _react2['default'].createElement(
 	        'div',
@@ -59808,11 +59840,15 @@
 	            )
 	          )
 	        ),
-	        files.length > 0 && _react2['default'].createElement(
-	          'div',
-	          { className: 'container' },
-	          _react2['default'].createElement(_SaveParams2['default'], { onSave: this.onSave, onChangeInput: this.onChangeInput, type: type }),
-	          _react2['default'].createElement(_photosUploadPhotosList2['default'], { images: files, onRemove: this.onRemove })
+	        _react2['default'].createElement(
+	          _spinerSpinner2['default'],
+	          { loading: loading },
+	          files.length > 0 && _react2['default'].createElement(
+	            'div',
+	            { className: 'container' },
+	            _react2['default'].createElement(_SaveParams2['default'], { onSave: this.onSave, onChangeInput: this.onChangeInput, type: type }),
+	            _react2['default'].createElement(_photosUploadPhotosList2['default'], { images: files, onRemove: this.onRemove })
+	          )
 	        )
 	      );
 	    }
@@ -60843,12 +60879,14 @@
 	    _react2['default'].createElement(
 	      _reactMaterialize.Row,
 	      null,
-	      _react2['default'].createElement(_reactMaterialize.Input, { s: 6, type: 'text', label: 'Description', id: 'description', onChange: onChangeInput('description'),
-	        validate: true })
-	    ),
-	    _react2['default'].createElement(
-	      _reactMaterialize.Row,
-	      null,
+	      _react2['default'].createElement(_reactMaterialize.Input, {
+	        name: 'type',
+	        type: 'checkbox',
+	        value: 'photosession',
+	        label: 'Photosession',
+	        checked: type == 'photosession' ? true : false,
+	        onChange: onChangeInput('type')
+	      }),
 	      _react2['default'].createElement(_reactMaterialize.Input, {
 	        name: 'type',
 	        type: 'checkbox',
@@ -60872,6 +60910,12 @@
 	        checked: type == 'children' ? true : false,
 	        onChange: onChangeInput('type')
 	      })
+	    ),
+	    type == 'photosession' && _react2['default'].createElement(
+	      _reactMaterialize.Row,
+	      null,
+	      _react2['default'].createElement(_reactMaterialize.Input, { s: 6, type: 'text', label: 'Description', id: 'description', onChange: onChangeInput('description'),
+	        validate: true })
 	    )
 	  );
 	};

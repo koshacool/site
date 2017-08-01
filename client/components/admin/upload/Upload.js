@@ -9,6 +9,9 @@ import UploadPhotosList from '../photos/UploadPhotosList';
 import SaveParams from './SaveParams';
 
 
+const randomSymbols = (n) => Math.random().toString(36).slice(2, 2 + Math.max(1, Math.min(n, 25)));
+
+
 class Upload extends React.Component {
   constructor() {
     super();
@@ -16,7 +19,9 @@ class Upload extends React.Component {
       loading: false,
       files: [],
       description: '',
-      type: 'wedding'
+      type: 'wedding',
+      cover: '',
+      renamedCover: ''
     };
 
     this.onDrop = this.onDrop.bind(this);
@@ -24,6 +29,7 @@ class Upload extends React.Component {
     this.onChangeInput = this.onChangeInput.bind(this);
     this.onSelectValue = this.onSelectValue.bind(this);
     this.onRemove = this.onRemove.bind(this);
+    this.changeNames = this.changeNames.bind(this);
   }
 
   onDrop(files) {
@@ -46,17 +52,23 @@ class Upload extends React.Component {
 
   onSave() {
     this.setState({loading: true});
-    const { files, description, type } = this.state;
-    let savedPhotosId = [];
+    const { files, description, type, cover } = this.state;
+    const filesObj = this.changeNames();
 
-    createPhotos(files, type)
+    createPhotos(filesObj, type)
       .then((res) => {
-        //savedPhotosId = JSON.parse(text);
         alert('saved');
         this.setState({
           loading: false,
           files: []
         });
+        return res.body;
+      })
+      .then(res => {
+        console.log(res)
+        if (type == 'photosession') {
+
+        }
       })
       .catch(err => {
         console.log(err);
@@ -73,6 +85,23 @@ class Upload extends React.Component {
     }
 
 
+  }
+
+  changeNames() {
+    const { files, type, cover } = this.state;
+    let filesObj = {};
+
+    files.forEach(file => {
+      if (type == 'photosession' && file.lastModified == cover ) {
+        let name = `cover${randomSymbols(15)}`;
+        filesObj[name] = file;
+        this.setState({renamedCover: name});
+      } else {
+        filesObj[randomSymbols(15)] = file;
+      }
+    });
+
+    return filesObj;
   }
 
 

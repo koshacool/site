@@ -1,18 +1,18 @@
 import axios from 'axios';
 import request from 'superagent';
-
 import { apiPrefix } from '../../etc/config.json';
 
-const randomSymbols = (n) => Math.random().toString(36).slice(2, 2 + Math.max(1, Math.min(n, 25)));
 
 export default {
-  createPhotos(files, type) {
+  createPhotos(filesObj, type) {
     return new Promise((resolve, reject) => {
       const req = request.post(`${apiPrefix}/upload`);
       req.query({type});
 
-      files.forEach(file => {
-        req.attach(randomSymbols(15), file);//Create random name for each file
+      const files = Object.keys(filesObj);
+
+      files.forEach(fileName => {
+        req.attach(fileName, filesObj[fileName]);//Create random name for each file
       });
 
       req.end((err, res) => {
@@ -49,7 +49,7 @@ export default {
 
   createPhotosession(files, type) {
     return new Promise((resolve, reject) => {
-      const req = request.post(`${apiPrefix}/upload`);
+      const req = request.post(`${apiPrefix}/photosession`);
       req.query({type});
 
       files.forEach(file => {

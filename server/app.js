@@ -48,7 +48,10 @@ app.get('/get/children', (req, res) => {
 });
 
 app.delete('/remove/:id', (req, res) => {
-  db.deletePhoto(req.params.id).then(data => res.send(data));
+  db.PhotoById(req.params.id)
+    .then(res => fs.unlink(path.join(__dirname, `../public/${res.title}`)))
+    .then(() => db.deletePhoto(req.params.id))
+    .then(data => res.send(data));
 });
 
 app.post('/upload', multipartMiddleware, function (req, res) {

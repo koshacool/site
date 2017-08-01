@@ -37,6 +37,12 @@ export function deletePhoto(id) {
   return Photo.findById(id).remove();
 }
 
+export function PhotoById(id) {
+  return Photo.findOne({ _id: id});
+}
+
+
+
 
 export function createPhotosession({ cover, description, photos }) {
   const photosession = new Photosession({
