@@ -24,12 +24,12 @@ class Upload extends React.Component {
       renamedCover: ''
     };
 
-    this.onDrop        = this.onDrop.bind(this);
-    this.onSave        = this.onSave.bind(this);
+    this.onDrop = this.onDrop.bind(this);
+    this.onSave = this.onSave.bind(this);
     this.onChangeInput = this.onChangeInput.bind(this);
     this.onSelectValue = this.onSelectValue.bind(this);
-    this.onRemove      = this.onRemove.bind(this);
-    this.changeNames   = this.changeNames.bind(this);
+    this.onRemove = this.onRemove.bind(this);
+    this.changeNames = this.changeNames.bind(this);
   }
 
   onDrop(files) {
@@ -52,10 +52,27 @@ class Upload extends React.Component {
 
   onSave() {
     this.setState({loading: true});
-    const filesObj = this.changeNames();
+    const { filesObj, coverName } = this.changeNames();
     const { files, description, type } = this.state;
+    let photosessionId = '';
 
-    createPhotos(filesObj, type)
+    if (type == 'photosession') {
+      createPhotosession(coverName, description)
+        .then(res => {
+          photosessionId = res.body._id;
+          return this.savePhotos(filesObj, type, photosessionId);
+        })
+        .catch(err => {
+          console.log(err);
+          alert('Wrong saving. Try again');
+        });
+    } else {
+     this.savePhotos(filesObj, type, photosessionId);
+    }
+  }
+
+  savePhotos(filesObj, type, photosessionId) {
+    createPhotos(filesObj, type, photosessionId)
       .then((res) => {
         return res.body;
       })
@@ -65,10 +82,6 @@ class Upload extends React.Component {
           loading: false,
           files: []
         });
-
-        if (type == 'photosession') {
-          return createPhotosession(this.state.renamedCover, description, res);
-        }
       })
       .catch(err => {
         console.log(err);
@@ -90,17 +103,18 @@ class Upload extends React.Component {
   changeNames() {
     const { files, type, cover } = this.state;
     let filesObj = {};
+    let coverName = '';
 
     files.forEach(file => {
       let name = randomSymbols(15);
       filesObj[name] = file;
 
-      if (type == 'photosession' && file.lastModified == cover ) {
-        this.setState({renamedCover: name});
+      if (type == 'photosession' && file.lastModified == cover) {
+        coverName = name;
       }
     });
 
-    return filesObj;
+    return {filesObj, coverName};
   }
 
 

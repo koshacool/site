@@ -4,10 +4,10 @@ import { apiPrefix } from '../../etc/config.json';
 
 
 export default {
-  createPhotos(filesObj, type) {
+  createPhotos(filesObj, type, photosessionId) {
     return new Promise((resolve, reject) => {
       const req = request.post(`${apiPrefix}/upload`);
-      req.query({type});
+      req.query({type, photosessionId});
 
       const files = Object.keys(filesObj);
 
@@ -47,11 +47,11 @@ export default {
   },
 
 
-  createPhotosession(photoName, description, photos) {
+  createPhotosession(photoName, description) {
     return new Promise((resolve, reject) => {
       const req = request.post(`${apiPrefix}/photosession`);
-      req.query({cover: `images/${photoName}.jpg`, description, photos});
 
+      req.query({cover: `images/${photoName}.jpg`, description});
       req.end((err, res) => {
         if (err) {
           reject(new Error(err));

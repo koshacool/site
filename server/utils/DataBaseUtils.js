@@ -21,10 +21,11 @@ export function photosByType(type) {
   return Photo.find({type});
 }
 
-export function createPhoto({ title, type }) {
+export function createPhoto({ title, type, photosessionId }) {
   const photo = new Photo({
     title,
     type,
+    photosessionId,
     createdAt: new Date()
   });
 
@@ -44,11 +45,10 @@ export function PhotoById(id) {
 
 
 
-export function createPhotosession({ cover, description, photos }) {
+export function createPhotosession({ cover, description }) {
   const photosession = new Photosession({
     cover,
     description,
-    photos,
     createdAt: new Date()
   });
 

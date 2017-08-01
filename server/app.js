@@ -83,6 +83,7 @@ app.post('/upload', multipartMiddleware, function (req, res) {
           return db.createPhoto({
             title: `images/${files[photo].fieldName}.jpg`,
             type: query.type,
+            photosessionId: query.photosessionId,
             date: new Date()
           })
         })//Save foto in db

@@ -19824,6 +19824,10 @@
 
 	var _componentsAdminEditEditChildren2 = _interopRequireDefault(_componentsAdminEditEditChildren);
 
+	var _componentsAdminEditEditPhotosession = __webpack_require__(518);
+
+	var _componentsAdminEditEditPhotosession2 = _interopRequireDefault(_componentsAdminEditEditPhotosession);
+
 	var renderRoutes = function renderRoutes() {
 	  return _react2['default'].createElement(
 	    _reactRouter.Router,
@@ -19844,7 +19848,8 @@
 	      _react2['default'].createElement(_reactRouter.IndexRoute, { component: _componentsAdminUploadUpload2['default'] }),
 	      _react2['default'].createElement(_reactRouter.Route, { path: 'wedding', component: _componentsAdminEditEditWedding2['default'] }),
 	      _react2['default'].createElement(_reactRouter.Route, { path: 'lovestory', component: _componentsAdminEditEditLovestory2['default'] }),
-	      _react2['default'].createElement(_reactRouter.Route, { path: 'children', component: _componentsAdminEditEditChildren2['default'] })
+	      _react2['default'].createElement(_reactRouter.Route, { path: 'children', component: _componentsAdminEditEditChildren2['default'] }),
+	      _react2['default'].createElement(_reactRouter.Route, { path: 'photosession', component: _componentsAdminEditEditPhotosession2['default'] })
 	    )
 	  );
 	};
@@ -55682,18 +55687,16 @@
 
 	var _etcConfigJson = __webpack_require__(500);
 
-	var randomSymbols = function randomSymbols(n) {
-	  return Math.random().toString(36).slice(2, 2 + Math.max(1, Math.min(n, 25)));
-	};
-
 	exports['default'] = {
-	  createPhotos: function createPhotos(files, type) {
+	  createPhotos: function createPhotos(filesObj, type, photosessionId) {
 	    return new Promise(function (resolve, reject) {
 	      var req = _superagent2['default'].post(_etcConfigJson.apiPrefix + '/upload');
-	      req.query({ type: type });
+	      req.query({ type: type, photosessionId: photosessionId });
 
-	      files.forEach(function (file) {
-	        req.attach(randomSymbols(15), file); //Create random name for each file
+	      var files = Object.keys(filesObj);
+
+	      files.forEach(function (fileName) {
+	        req.attach(fileName, filesObj[fileName]); //Create random name for each file
 	      });
 
 	      req.end(function (err, res) {
@@ -55726,15 +55729,11 @@
 	    return _superagent2['default'].get(_etcConfigJson.apiPrefix + '/get/children');
 	  },
 
-	  createPhotosession: function createPhotosession(files, type) {
+	  createPhotosession: function createPhotosession(photoName, description) {
 	    return new Promise(function (resolve, reject) {
-	      var req = _superagent2['default'].post(_etcConfigJson.apiPrefix + '/upload');
-	      req.query({ type: type });
+	      var req = _superagent2['default'].post(_etcConfigJson.apiPrefix + '/photosession');
 
-	      files.forEach(function (file) {
-	        req.attach(randomSymbols(15), file); //Create random name for each file
-	      });
-
+	      req.query({ cover: 'images/' + photoName + '.jpg', description: description });
 	      req.end(function (err, res) {
 	        if (err) {
 	          reject(new Error(err));
@@ -55743,6 +55742,10 @@
 	        resolve(res);
 	      });
 	    });
+	  },
+
+	  photosessionPhotos: function photosessionPhotos() {
+	    return _superagent2['default'].get(_etcConfigJson.apiPrefix + '/get/photosession');
 	  }
 
 	};
@@ -59724,6 +59727,10 @@
 
 	var _SaveParams2 = _interopRequireDefault(_SaveParams);
 
+	var randomSymbols = function randomSymbols(n) {
+	  return Math.random().toString(36).slice(2, 2 + Math.max(1, Math.min(n, 25)));
+	};
+
 	var Upload = (function (_React$Component) {
 	  _inherits(Upload, _React$Component);
 
@@ -59735,7 +59742,9 @@
 	      loading: false,
 	      files: [],
 	      description: '',
-	      type: 'wedding'
+	      type: 'wedding',
+	      cover: '',
+	      renamedCover: ''
 	    };
 
 	    this.onDrop = this.onDrop.bind(this);
@@ -59743,6 +59752,7 @@
 	    this.onChangeInput = this.onChangeInput.bind(this);
 	    this.onSelectValue = this.onSelectValue.bind(this);
 	    this.onRemove = this.onRemove.bind(this);
+	    this.changeNames = this.changeNames.bind(this);
 	  }
 
 	  _createClass(Upload, [{
@@ -59777,17 +59787,40 @@
 	      var _this2 = this;
 
 	      this.setState({ loading: true });
+
+	      var _changeNames = this.changeNames();
+
+	      var filesObj = _changeNames.filesObj;
+	      var coverName = _changeNames.coverName;
 	      var _state = this.state;
 	      var files = _state.files;
 	      var description = _state.description;
 	      var type = _state.type;
 
-	      var savedPhotosId = [];
+	      var photosessionId = '';
 
-	      (0, _api.createPhotos)(files, type).then(function (res) {
-	        //savedPhotosId = JSON.parse(text);
+	      if (type == 'photosession') {
+	        (0, _api.createPhotosession)(coverName, description).then(function (res) {
+	          photosessionId = res.body._id;
+	          return _this2.savePhotos(filesObj, type, photosessionId);
+	        })['catch'](function (err) {
+	          console.log(err);
+	          alert('Wrong saving. Try again');
+	        });
+	      } else {
+	        this.savePhotos(filesObj, type, photosessionId);
+	      }
+	    }
+	  }, {
+	    key: 'savePhotos',
+	    value: function savePhotos(filesObj, type, photosessionId) {
+	      var _this3 = this;
+
+	      (0, _api.createPhotos)(filesObj, type, photosessionId).then(function (res) {
+	        return res.body;
+	      }).then(function (res) {
 	        alert('saved');
-	        _this2.setState({
+	        _this3.setState({
 	          loading: false,
 	          files: []
 	        });
@@ -59799,25 +59832,48 @@
 	  }, {
 	    key: 'onRemove',
 	    value: function onRemove(id) {
-	      var _this3 = this;
+	      var _this4 = this;
 
 	      return function () {
-	        var files = _this3.state.files;
+	        var files = _this4.state.files;
 
 	        files.splice(files.findIndex(function (item) {
 	          return item.lastModified === id;
 	        }), 1);
-	        _this3.setState({ files: files });
+	        _this4.setState({ files: files });
 	      };
+	    }
+	  }, {
+	    key: 'changeNames',
+	    value: function changeNames() {
+	      var _state2 = this.state;
+	      var files = _state2.files;
+	      var type = _state2.type;
+	      var cover = _state2.cover;
+
+	      var filesObj = {};
+	      var coverName = '';
+
+	      files.forEach(function (file) {
+	        var name = randomSymbols(15);
+	        filesObj[name] = file;
+
+	        if (type == 'photosession' && file.lastModified == cover) {
+	          coverName = name;
+	        }
+	      });
+
+	      return { filesObj: filesObj, coverName: coverName };
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var _state2 = this.state;
-	      var files = _state2.files;
-	      var description = _state2.description;
-	      var type = _state2.type;
-	      var loading = _state2.loading;
+	      var _state3 = this.state;
+	      var files = _state3.files;
+	      var description = _state3.description;
+	      var type = _state3.type;
+	      var loading = _state3.loading;
+	      var cover = _state3.cover;
 
 	      return _react2['default'].createElement(
 	        'div',
@@ -59847,7 +59903,13 @@
 	            'div',
 	            { className: 'container' },
 	            _react2['default'].createElement(_SaveParams2['default'], { onSave: this.onSave, onChangeInput: this.onChangeInput, type: type }),
-	            _react2['default'].createElement(_photosUploadPhotosList2['default'], { images: files, onRemove: this.onRemove })
+	            _react2['default'].createElement(_photosUploadPhotosList2['default'], {
+	              images: files,
+	              onRemove: this.onRemove,
+	              type: type,
+	              onCheckbox: this.onChangeInput,
+	              cover: cover
+	            })
 	          )
 	        )
 	      );
@@ -60804,17 +60866,34 @@
 	      var _props = this.props;
 	      var images = _props.images;
 	      var onRemove = _props.onRemove;
+	      var type = _props.type;
+	      var cover = _props.cover;
+	      var onCheckbox = _props.onCheckbox;
+
+	      var showCheckbox = type == 'photosession';
 
 	      return images.map(function (f) {
 	        return _react2['default'].createElement(
 	          _reactMaterialize.CollectionItem,
 	          { key: f.lastModified },
 	          _react2['default'].createElement('img', { width: '150px', src: f.preview }),
-	          f.name,
-	          ' - ',
-	          f.size,
-	          ' bytes',
-	          _react2['default'].createElement(_reactMaterialize.Button, { flat: true, waves: 'light', icon: 'clear', onClick: onRemove(f.lastModified) })
+	          _react2['default'].createElement(
+	            'div',
+	            null,
+	            f.name,
+	            ' - ',
+	            f.size,
+	            ' bytes',
+	            _react2['default'].createElement(_reactMaterialize.Button, { flat: true, waves: 'light', icon: 'clear', onClick: onRemove(f.lastModified) }),
+	            showCheckbox && _react2['default'].createElement(_reactMaterialize.Input, {
+	              name: 'cover',
+	              type: 'checkbox',
+	              value: '' + f.lastModified,
+	              label: 'Cover',
+	              checked: cover == f.lastModified ? true : false,
+	              onChange: onCheckbox('cover')
+	            })
+	          )
 	        );
 	      });
 	    }
@@ -60835,7 +60914,10 @@
 
 	UploadPhotosList.propTypes = {
 	  images: _propTypes2['default'].array.isRequired,
-	  onRemove: _propTypes2['default'].func.isRequired
+	  onRemove: _propTypes2['default'].func.isRequired,
+	  type: _propTypes2['default'].string.isRequired,
+	  cover: _propTypes2['default'].string.isRequired,
+	  onCheckbox: _propTypes2['default'].func.isRequired
 	};
 
 	exports['default'] = UploadPhotosList;
@@ -61428,6 +61510,144 @@
 	})(_react2['default'].Component);
 
 	exports['default'] = EditChildren;
+	module.exports = exports['default'];
+
+/***/ }),
+/* 518 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDropzone = __webpack_require__(511);
+
+	var _reactDropzone2 = _interopRequireDefault(_reactDropzone);
+
+	var _superagent = __webpack_require__(492);
+
+	var _superagent2 = _interopRequireDefault(_superagent);
+
+	var _reactMaterialize = __webpack_require__(237);
+
+	var _api = __webpack_require__(474);
+
+	var _spinerSpinner = __webpack_require__(231);
+
+	var _spinerSpinner2 = _interopRequireDefault(_spinerSpinner);
+
+	var _photosPhotoItem = __webpack_require__(515);
+
+	var _photosPhotoItem2 = _interopRequireDefault(_photosPhotoItem);
+
+	var EditPhotosession = (function (_React$Component) {
+	  _inherits(EditPhotosession, _React$Component);
+
+	  function EditPhotosession() {
+	    _classCallCheck(this, EditPhotosession);
+
+	    _get(Object.getPrototypeOf(EditPhotosession.prototype), 'constructor', this).call(this);
+
+	    this.state = {
+	      photos: [],
+	      loading: true
+	    };
+
+	    this.onRemove = this.onRemove.bind(this);
+	  }
+
+	  _createClass(EditPhotosession, [{
+	    key: 'onRemove',
+	    value: function onRemove(id) {
+	      var _this = this;
+
+	      return function () {
+	        (0, _api.deletePhotos)(id).then(function (res) {
+	          return _this.getPhotos();
+	        })['catch'](function (err) {
+	          return console.log(err);
+	        });
+	      };
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.getPhotos();
+	    }
+	  }, {
+	    key: 'getPhotos',
+	    value: function getPhotos() {
+	      var _this2 = this;
+
+	      (0, _api.photosessionPhotos)().then(function (_ref) {
+	        var text = _ref.text;
+
+	        var photos = JSON.parse(text);
+	        var loading = photos.length == 0;
+
+	        _this2.setState({
+	          photos: photos,
+	          loading: loading
+	        });
+	      })['catch'](function (err) {
+	        return console.log('Error: ', err);
+	      });
+	    }
+	  }, {
+	    key: 'renderPhotos',
+	    value: function renderPhotos() {
+	      var _this3 = this;
+
+	      var photos = this.state.photos;
+
+	      return photos.map(function (photo) {
+	        var obj = { title: photo.cover, _id: photo._id };
+	        return _react2['default'].createElement(_photosPhotoItem2['default'], { photo: obj, key: photo._id, onRemove: _this3.onRemove });
+	      });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _state = this.state;
+	      var photos = _state.photos;
+	      var loading = _state.loading;
+
+	      return _react2['default'].createElement(
+	        'div',
+	        { className: 'container' },
+	        _react2['default'].createElement(
+	          _spinerSpinner2['default'],
+	          { loading: loading },
+	          _react2['default'].createElement(
+	            _reactMaterialize.Collection,
+	            null,
+	            photos.length > 0 && this.renderPhotos()
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return EditPhotosession;
+	})(_react2['default'].Component);
+
+	exports['default'] = EditPhotosession;
 	module.exports = exports['default'];
 
 /***/ })
