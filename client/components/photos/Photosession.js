@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Masonry from 'masonry-layout';
 
 import Spinner from '../spiner/Spinner';
-import { listPhotos } from '../../api';
+import { photosessionPhotos } from '../../api';
 import FolderItem from './FolderItem';
 import MasanryConfig from '../MasanryConfig';
 
@@ -22,7 +22,7 @@ class Photosession extends React.Component {
     const { photos } = this.state;
 
     return photos
-      .map(photo => <FolderItem src={photo.title} key={photo._id} onLoad={this.startMasonry}/>);
+      .map(photo => <FolderItem src={photo.cover} key={photo._id} onLoad={this.startMasonry}/>);
   }
 
 
@@ -45,7 +45,7 @@ class Photosession extends React.Component {
   }
 
   componentDidMount() {
-    listPhotos()
+    photosessionPhotos()
       .then(({ text }) => this.setState({photos: JSON.parse(text)}));
 
   }
@@ -53,7 +53,7 @@ class Photosession extends React.Component {
   render() {
     const { photos } = this.state;
     const loading = photos.length === 0;
-
+    console.log(photos)
     return (
       <div className="container">
         <Spinner loading={loading} className="grid" id="grid">

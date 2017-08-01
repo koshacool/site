@@ -45,10 +45,37 @@ app.get('/get/lovestory', (req, res) => {
 
 app.get('/get/children', (req, res) => {
   db.photosByType('children').then(data => res.send(data));
+})
+
+app.get('/get/photosession', (req, res) => {
+  db.listPhotosession().then(data => res.send(data));
 });
 
-app.delete('/remove/:id', (req, res) => {
-  db.deletePhoto(req.params.id).then(data => res.send(data));
+
+app.delete('/photo/:id', (req, res) => {
+  db.PhotoById(req.params.id)
+    .then(res => fs.unlink(path.join(__dirname, `../public/${res.title}`)))//delete foto in folder
+    .then(() => db.deletePhoto(req.params.id))//delete note in db
+    .then(data => res.send(data))//return result
+    .catch(err => console.log('Error: ', err));
+});
+
+app.delete('/photosession/:id', (req, res) => {
+  const id = req.params.id;
+  db.deletePhotosession(id)
+    .then(() => db.PhotoByPhotosessionId(id))
+    .then((data) => {
+      let arrOfPromisses = data.map(photo => {
+        return db.PhotoById(photo._id)
+          .then(res => fs.unlink(path.join(__dirname, `../public/${res.title}`)))//delete foto in folder
+          .then(() => db.deletePhoto(photo._id))//delete note in db
+          .then(data => res.send(data))//return result
+          .catch(err => console.log('Error: ', err));
+      })
+     return Promise.all(arrOfPromises);
+    })
+    .then(data => res.send(data))//return result
+  .catch(err => console.log('Error: ', err));
 });
 
 app.post('/upload', multipartMiddleware, function (req, res) {
@@ -63,32 +90,44 @@ app.post('/upload', multipartMiddleware, function (req, res) {
       source.on('end', resolve);
       source.on('error', reject);
       source.pipe(dest);
-    });
+    })
   };
 
+
   new Promise((resolve, reject) => {
-    photosNames.forEach((photo, i) => {
-      moveFile(files[photo].path, path.join(__dirname, `../public/images/${files[photo].fieldName}.jpg`))
-        .then(fs.unlink(files[photo].path))
-        .then(db.createPhoto({
-          title: `images/${files[photo].fieldName}.jpg`,
-          type: query.type,
-          description: query.description,
-          date: new Date()
-        }))
+    let arrOfPromises = photosNames.map((photo, i) => {
+      return moveFile(files[photo].path, path.join(__dirname, `../public/images/${files[photo].fieldName}.jpg`))//move file
+        .then(fs.unlink(files[photo].path))//remove file
         .then(() => {
-          if (i == photosNames.length - 1) {
-            resolve();
-          }
-        })
-        .catch(err => {
-          reject(err);
-        });
+          return db.createPhoto({
+            title: `images/${files[photo].fieldName}.jpg`,
+            type: query.type,
+            photosessionId: query.photosessionId,
+            date: new Date()
+          })
+        })//Save foto in db
+        .catch(reject)
     });
+
+    resolve(Promise.all(arrOfPromises));
   })
-    .then(res.send('saved'))
-    .catch(err => console.log(err));
+    .then(arrOfResult => {
+      return arrOfResult.map(obj => obj._id);
+    })
+    .then(arr => res.send(arr))
+    .catch(console.log.bind(console))
 });
+
+app.post('/photosession', multipartMiddleware, function (req, res) {
+  new Promise((resolve, reject) => {
+    db.createPhotosession(req.query)
+      .then(result => resolve(result))
+      .catch(err => reject(err));
+  })
+    .then(result => res.send(result))
+    .catch(console.log.bind(console));
+});
+
 
 app.get('*', function (req, res) {
   res.sendFile(path.join(__dirname, '../public/index.html'));

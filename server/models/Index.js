@@ -1,2 +1,2 @@
 import './Photo';
-
+import './Photosession';

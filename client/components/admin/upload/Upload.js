@@ -2,21 +2,26 @@ import React from 'react';
 import Dropzone from 'react-dropzone';
 import request from 'superagent';
 //import { Icon } from 'react-materialize';
-
+import { createPhotos, createPhotosession } from '../../../api';
 import { apiPrefix } from '../../../../etc/config.json';
 import Spinner from '../../spiner/Spinner';
 import UploadPhotosList from '../photos/UploadPhotosList';
 import SaveParams from './SaveParams';
 
+
 const randomSymbols = (n) => Math.random().toString(36).slice(2, 2 + Math.max(1, Math.min(n, 25)));
+
 
 class Upload extends React.Component {
   constructor() {
     super();
     this.state = {
+      loading: false,
       files: [],
       description: '',
-      type: 'wedding'
+      type: 'wedding',
+      cover: '',
+      renamedCover: ''
     };
 
     this.onDrop = this.onDrop.bind(this);
@@ -24,6 +29,7 @@ class Upload extends React.Component {
     this.onChangeInput = this.onChangeInput.bind(this);
     this.onSelectValue = this.onSelectValue.bind(this);
     this.onRemove = this.onRemove.bind(this);
+    this.changeNames = this.changeNames.bind(this);
   }
 
   onDrop(files) {
@@ -46,27 +52,41 @@ class Upload extends React.Component {
 
   onSave() {
     this.setState({loading: true});
+    const { filesObj, coverName } = this.changeNames();
     const { files, description, type } = this.state;
-    const about = {description, type};
+    let photosessionId = '';
 
-    const req = request.post(`${apiPrefix}/upload`);
-    req.query(about);
+    if (type == 'photosession') {
+      createPhotosession(coverName, description)
+        .then(res => {
+          photosessionId = res.body._id;
+          return this.savePhotos(filesObj, type, photosessionId);
+        })
+        .catch(err => {
+          console.log(err);
+          alert('Wrong saving. Try again');
+        });
+    } else {
+     this.savePhotos(filesObj, type, photosessionId);
+    }
+  }
 
-    files.forEach(file => {
-      req.attach(randomSymbols(15), file);//Create random name for each file
-    });
-
-    req.end((err, res) => {
-      this.setState({loading: false});
-      if (err) {
+  savePhotos(filesObj, type, photosessionId) {
+    createPhotos(filesObj, type, photosessionId)
+      .then((res) => {
+        return res.body;
+      })
+      .then(res => {
+        alert('saved');
+        this.setState({
+          loading: false,
+          files: []
+        });
+      })
+      .catch(err => {
+        console.log(err);
         alert('Wrong saving. Try again');
-        return console.log('returned error:', err);
-      }
-      this.setState({files: []});
-      alert(res.text);
-
-      return;
-    });
+      });
   }
 
   onRemove(id) {
@@ -74,34 +94,58 @@ class Upload extends React.Component {
       const { files } = this.state;
 
       files.splice(files.findIndex((item) => item.lastModified === id), 1);
-      this.setState({ files });
+      this.setState({files});
     }
 
 
   }
 
+  changeNames() {
+    const { files, type, cover } = this.state;
+    let filesObj = {};
+    let coverName = '';
+
+    files.forEach(file => {
+      let name = randomSymbols(15);
+      filesObj[name] = file;
+
+      if (type == 'photosession' && file.lastModified == cover) {
+        coverName = name;
+      }
+    });
+
+    return {filesObj, coverName};
+  }
+
 
   render() {
-    const { files, description, type } = this.state;
+    const { files, description, type, loading, cover } = this.state;
 
     return (
+      <div className="container">
+        <div className="dropzone">
+          <h2>drop files here</h2>
+          <Dropzone onDrop={this.onDrop} onDropRejected={this.onDropRejected} multiple accept="image/jpeg">
+            <p>Try dropping some files here, or click to select files to upload.</p>
+          </Dropzone>
+        </div>
 
-        <div className="container">
-          <div className="dropzone">
-            <h2>drop files here</h2>
-            <Dropzone onDrop={this.onDrop} onDropRejected={this.onDropRejected} multiple accept="image/jpeg">
-              <p>Try dropping some files here, or click to select files to upload.</p>
-            </Dropzone>
-          </div>
-
+        <Spinner loading={loading}>
           {files.length > 0 && (
             <div className="container">
               <SaveParams onSave={this.onSave} onChangeInput={this.onChangeInput} type={type}/>
-              <UploadPhotosList images={files} onRemove={this.onRemove}/>
+              <UploadPhotosList
+                images={files}
+                onRemove={this.onRemove}
+                type={type}
+                onCheckbox={this.onChangeInput}
+                cover={cover}
+              />
             </div>
           )}
+        </Spinner>
 
-        </div>
+      </div>
 
 
     );
