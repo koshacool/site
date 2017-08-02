@@ -8,6 +8,7 @@ class Carusel extends React.Component {
   constructor() {
     super();
 
+    this.mixins = [Carousel.ControllerMixin];
     this.renderPhotos = this.renderPhotos.bind(this);
   }
 
@@ -20,8 +21,8 @@ class Carusel extends React.Component {
 
   render() {
     return (
-      <div className="container">
-        <Carousel dragging={true} cellSpacing={20} slideWidth={0.75}>
+      <div className="container" >
+        <Carousel>
           { this.renderPhotos() }
         </Carousel>
       </div>

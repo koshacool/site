@@ -8,7 +8,7 @@ import { photosessionPhotos } from '../../api';
 import PhotoItem from './PhotoItem';
 import MasanryConfig from '../MasanryConfig';
 //import { Carousel  } from 'react-materialize';
-import Carusel1 from '../carusel/Carusel1';
+import Carusel from '../carusel/Carusel';
 
 class PhotosessionPhotos extends React.Component {
   constructor() {
@@ -79,7 +79,7 @@ class PhotosessionPhotos extends React.Component {
         <Spinner loading={loading} className="grid" id="grid">
           { !loading && this.renderPhotos() }
 
-          { !loading && <Carusel1 photos={photos} /> }
+          { showCarusel && <Carusel photos={photos} /> }
         </Spinner>
       </div>
     );

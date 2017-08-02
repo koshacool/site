@@ -76,6 +76,11 @@ nav ul a, nav .brand-logo {
     opacity: 0.6;
 }
 
+.carousel {
+    margin-top: 30px;
+    z-index: 999;
+}
+
 
 
 
