@@ -20,12 +20,12 @@ class PhotoItem extends React.Component {
 
   render() {
     const { loading } = this.state;
-    const { src, onLoad } = this.props;
+    const { src, onLoad, showCarusel } = this.props;
 
     return (
       <Spinner loading={loading} className="grid-item">
 
-        <img src={`${apiPrefix}/${src}`} onLoad={onLoad}/>
+        <img src={`${apiPrefix}/${src}`} onLoad={onLoad} onClick={showCarusel} />
 
       </Spinner>
     );
@@ -33,7 +33,9 @@ class PhotoItem extends React.Component {
 }
 
 PhotoItem.propTypes = {
-  src: PropTypes.string.isRequired
+  src: PropTypes.string.isRequired,
+  onLoad: PropTypes.func.isRequired,
+  showCarusel: PropTypes.func.isRequired
 };
 
 
