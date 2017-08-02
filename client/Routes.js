@@ -8,6 +8,7 @@ import Wedding from './components/photos/Wedding';
 import LoveStory from './components/photos/LoveStory';
 import Children from './components/photos/Children';
 import Photosession from './components/photos/Photosession';
+import PhotosessionPhotos from './components/photos/PhotosessionPhotos';
 
 import Admin from './components/admin/Admin';
 import Upload from './components/admin/upload/Upload';
@@ -25,6 +26,7 @@ const renderRoutes = () => (
       <Route path="lovestory" component={LoveStory}/>
       <Route path="children" component={Children}/>
       <Route path="photosession" component={Photosession}/>
+      <Route path="photosession/:_id" component={PhotosessionPhotos} />
     </Route>
 
     <Route path="/admin" component={Admin}>
@@ -33,6 +35,7 @@ const renderRoutes = () => (
       <Route path="lovestory" component={EditLovestory}/>
       <Route path="children" component={EditChildren}/>
       <Route path="photosession" component={EditPhotosession}/>
+
     </Route>
   </Router >
 );

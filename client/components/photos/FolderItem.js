@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Spinner from '../spiner/Spinner';
-
+import {Link} from 'react-router';
 
 class FolderItem extends React.Component {
   constructor() {
@@ -19,12 +19,15 @@ class FolderItem extends React.Component {
 
   render() {
     const { loading } = this.state;
-    const { src, onLoad } = this.props;
+    const { src, onLoad, photosessionId } = this.props;
 
     return (
       <Spinner loading={loading}>
         <div className="image grid-item" id="image">
-          <img src={src}  onLoad={onLoad}/>
+          <Link to={`/photosession/${photosessionId}`} >
+            <img src={src} onLoad={onLoad}/>
+          </Link>
+
         </div>
       </Spinner>
     );
@@ -32,7 +35,9 @@ class FolderItem extends React.Component {
 }
 
 FolderItem.propTypes = {
-  src: PropTypes.string.isRequired
+  src: PropTypes.string.isRequired,
+  onLoad: PropTypes.func.isRequired,
+  photosessionId: PropTypes.string.isRequired,
 };
 
 
