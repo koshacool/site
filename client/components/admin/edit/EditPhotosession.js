@@ -2,7 +2,7 @@ import React from 'react';
 import Dropzone from 'react-dropzone';
 import request from 'superagent';
 import { Collection } from 'react-materialize';
-import { photosessionPhotos, deletePhotosession } from '../../../api';
+import { photosession, deletePhotosession } from '../../../api';
 
 import Spinner from '../../spiner/Spinner';
 import PhotoItem from '../photos/PhotoItem';
@@ -31,7 +31,7 @@ class EditPhotosession extends React.Component {
   }
 
   getPhotos() {
-    photosessionPhotos()
+    photosession()
       .then(({ text }) => {
         const photos = JSON.parse(text);
         const loading = photos.length == 0;

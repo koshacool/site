@@ -62,8 +62,12 @@ export default {
     });
   },
 
-  photosessionPhotos() {
+  photosession() {
     return request.get(`${apiPrefix}/get/photosession`);
+  },
+
+  photosessionPhotos(id) {
+    return request.get(`${apiPrefix}/get/photosession/${id}`);
   },
 
   deletePhotosession(id) {

@@ -51,6 +51,11 @@ app.get('/get/photosession', (req, res) => {
   db.listPhotosession().then(data => res.send(data));
 });
 
+app.get('/get/photosession/:id', (req, res) => {
+  const id = req.params.id;
+  db.PhotoByPhotosessionId(id).then(data => res.send(data));
+});
+
 
 app.delete('/photo/:id', (req, res) => {
   db.PhotoById(req.params.id)

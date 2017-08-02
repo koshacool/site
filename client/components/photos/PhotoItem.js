@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Spinner from '../spiner/Spinner';
+import { apiPrefix } from '../../../etc/config.json';
 
 
 class PhotoItem extends React.Component {
@@ -24,7 +25,7 @@ class PhotoItem extends React.Component {
     return (
       <Spinner loading={loading} className="grid-item">
 
-        <img src={src} onLoad={onLoad}/>
+        <img src={`${apiPrefix}/${src}`} onLoad={onLoad}/>
 
       </Spinner>
     );
