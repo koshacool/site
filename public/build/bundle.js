@@ -55710,7 +55710,7 @@
 	  },
 
 	  deletePhotos: function deletePhotos(photoId) {
-	    return _axios2['default']['delete'](_etcConfigJson.apiPrefix + '/remove/' + photoId);
+	    return _axios2['default']['delete'](_etcConfigJson.apiPrefix + '/photo/' + photoId);
 	  },
 
 	  listPhotos: function listPhotos() {
@@ -55746,6 +55746,10 @@
 
 	  photosessionPhotos: function photosessionPhotos() {
 	    return _superagent2['default'].get(_etcConfigJson.apiPrefix + '/get/photosession');
+	  },
+
+	  deletePhotosession: function deletePhotosession(id) {
+	    return _axios2['default']['delete'](_etcConfigJson.apiPrefix + '/photosession/' + id);
 	  }
 
 	};
@@ -59387,7 +59391,7 @@
 	      var photos = this.state.photos;
 
 	      return photos.map(function (photo) {
-	        return _react2['default'].createElement(_FolderItem2['default'], { src: photo.title, key: photo._id, onLoad: _this.startMasonry });
+	        return _react2['default'].createElement(_FolderItem2['default'], { src: photo.cover, key: photo._id, onLoad: _this.startMasonry });
 	      });
 	    }
 	  }, {
@@ -59416,7 +59420,7 @@
 	    value: function componentDidMount() {
 	      var _this2 = this;
 
-	      (0, _api.listPhotos)().then(function (_ref) {
+	      (0, _api.photosessionPhotos)().then(function (_ref) {
 	        var text = _ref.text;
 	        return _this2.setState({ photos: JSON.parse(text) });
 	      });
@@ -59427,7 +59431,7 @@
 	      var photos = this.state.photos;
 
 	      var loading = photos.length === 0;
-
+	      console.log(photos);
 	      return _react2['default'].createElement(
 	        'div',
 	        { className: 'container' },
@@ -61578,7 +61582,7 @@
 	      var _this = this;
 
 	      return function () {
-	        (0, _api.deletePhotos)(id).then(function (res) {
+	        return (0, _api.deletePhotosession)(id).then(function (res) {
 	          return _this.getPhotos();
 	        })['catch'](function (err) {
 	          return console.log(err);
