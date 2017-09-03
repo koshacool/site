@@ -4,6 +4,13 @@ body {
     flex-direction: column;
 }
 
+button {
+    margin-left: 5px;
+    margin-bottom: 5px;
+}
+
+.modal { max-width: 30% !important;  }
+
 main {
     flex: 1 0 auto;
 }
