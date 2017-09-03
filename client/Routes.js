@@ -26,18 +26,18 @@ const renderRoutes = () => (
       <Route path="lovestory" component={LoveStory}/>
       <Route path="children" component={Children}/>
       <Route path="photosession" component={Photosession}/>
-      <Route path="photosession/:_id" component={PhotosessionPhotos} />
+      <Route path="photosession/:_id" component={PhotosessionPhotos} />      
     </Route>
 
     <Route path="/admin" component={Admin}>
-      <IndexRoute component={Upload} />
-      <Route path="wedding" component={EditWedding}/>
-      <Route path="lovestory" component={EditLovestory}/>
-      <Route path="children" component={EditChildren}/>
-      <Route path="photosession" component={EditPhotosession}/>
+        <IndexRoute component={Upload} />
+        <Route path="wedding" component={EditWedding}/>
+        <Route path="lovestory" component={EditLovestory}/>
+        <Route path="children" component={EditChildren}/>
+        <Route path="photosession" component={EditPhotosession}/>
 
-    </Route>
-  </Router >
+    </Route>    
+  </Router>
 );
 
 export default renderRoutes;

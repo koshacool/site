@@ -121,6 +121,7 @@ app.post('/upload', multipartMiddleware, function (req, res) {
     })
     .then(arr => res.send(arr))
     .catch(console.log.bind(console))
+    
 });
 
 app.post('/photosession', multipartMiddleware, function (req, res) {

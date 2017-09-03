@@ -11,7 +11,7 @@ class Admin extends React.Component {
 
   render() {
     const { children } = this.props;
-
+   console.log(this.props)
     return (
       <div className="container">
 

@@ -120,7 +120,7 @@ class Upload extends React.Component {
 
   render() {
     const { files, description, type, loading, cover } = this.state;
-
+    
     return (
       <div className="container">
         <div className="dropzone">
